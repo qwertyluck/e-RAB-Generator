@@ -1,130 +1,260 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aplikasi e-RAB Pagu Indikatif v3 (Hierarki Kertas Kerja)</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<style>
-    :root {
-        --primary-color: #00564d;
-        --primary-hover: #004138;
-        --bg-gradient: linear-gradient(135deg, #f4f7f6 0%, #e2e8f0 100%);
-    }
-
-    body { 
-        background: var(--bg-gradient); 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .container-fluid { flex: 1; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi e-RAB Pagu Indikatif v3 (Hierarki Kertas Kerja)</title>
     
-    .navbar {
-        background: linear-gradient(135deg, #00564d 0%, #00332c 100%);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    /* Style Tab Sheet */
-    .sheet-tabs-container {
-        background: #ffffff;
-        border-radius: 10px;
-        padding: 10px 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        overflow-x: auto;
-        white-space: nowrap;
-        margin-bottom: 20px;
-    }
-    .sheet-tab {
-        background: #f1f5f9;
-        border: 1px solid #cbd5e1;
-        color: #475569;
-        padding: 6px 14px;
-        border-radius: 6px;
-        font-weight: 600;
-        font-size: 13px;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.2s;
-    }
-    .sheet-tab:hover { background: #e2e8f0; }
-    .sheet-tab.active {
-        background: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-        box-shadow: 0 2px 8px rgba(0,86,77,0.25);
-    }
-    .btn-close-sheet {
-        font-size: 11px; padding: 2px; border-radius: 50%;
-        background: rgba(0,0,0,0.1); color: inherit; border: none; cursor: pointer;
-    }
-
-    .card {
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        border: none; border-radius: 12px; margin-bottom: 25px; background: #ffffff;
-    }
-    .bg-kejaksaan { background-color: var(--primary-color); color: white; }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    /* Tabel input transparan agar rapi */
-    .table input, .table select, .table textarea {
-        background-color: transparent !important;
-        border: 1px solid transparent;
-        box-shadow: none !important;
-        transition: border 0.3s;
-    }
-    .table input:focus, .table select:focus, .table textarea:focus {
-        border-bottom: 1px solid var(--primary-color);
-        background-color: #f8f9fa !important;
-    }
+    <style>
+        /* =========================================
+           1. VARIABEL WARNA & TEMA
+           ========================================= */
+        :root {
+            --primary-color: #00564d;
+            --primary-hover: #004138;
+            --bg-gradient: linear-gradient(135deg, #f4f7f6 0%, #e2e8f0 100%);
+        }
 
-    textarea.auto-height { overflow: hidden; resize: none; min-height: 38px; }
+        /* =========================================
+           2. STYLING DASAR & LAYOUT
+           ========================================= */
+        body { 
+            background: var(--bg-gradient); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    #kopSurat, #tempatTandaTangan { display: none; }
-    .tampil-saat-cetak-saja { display: none; }
-
-    /* Pengaturan Cetak Native - Landscape DIPA */
-    @media print {
-        @page { size: landscape; margin: 15mm; }
-        .sembunyikan-saat-cetak, .sheet-tabs-container, nav, .btn, #statusBox { display: none !important; }
-        .tampil-saat-cetak-saja { display: block !important; }
-        body { background-color: white !important; font-size: 12px; }
-        .card { box-shadow: none !important; border: none !important; margin: 0; padding:0; }
-        .card-header { display: none !important; }
-        
-        table { width: 100% !important; border-collapse: collapse; }
-        th, td { border: 1px solid black !important; padding: 4px !important; }
-        
-        /* Menghilangkan format input agar menyatu seperti teks biasa */
-        input, textarea, select {
-            border: none !important; background: transparent !important;
-            appearance: none; -moz-appearance: none; -webkit-appearance: none;
-            color: black !important; padding: 0 !important; margin: 0 !important;
+        .container-fluid { 
+            flex: 1; 
         }
         
-        #kopSurat { display: block; margin-bottom: 20px; }
-        #tempatTandaTangan { display: block !important; margin-top: 30px; page-break-inside: avoid; }
-        footer { display: none !important; }
-    }
-    
-    footer { font-size: 0.85rem; color: #6c757d; }
-</style>
+        .navbar {
+            background: linear-gradient(135deg, #00564d 0%, #00332c 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* =========================================
+           3. STYLING MULTI-SHEET TABS
+           ========================================= */
+        .sheet-tabs-container {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 10px 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-bottom: 20px;
+        }
+
+        .sheet-tab {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sheet-tab:hover { 
+            background: #e2e8f0; 
+        }
+
+        .sheet-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0,86,77,0.25);
+        }
+
+        .btn-close-sheet {
+            font-size: 11px; 
+            padding: 2px; 
+            border-radius: 50%;
+            background: rgba(0,0,0,0.1); 
+            color: inherit; 
+            border: none; 
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-close-sheet:hover {
+            background: rgba(255, 0, 0, 0.5);
+            color: white;
+        }
+
+        /* =========================================
+           4. STYLING KARTU & TABEL RAB
+           ========================================= */
+        .card {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: none; 
+            border-radius: 12px; 
+            margin-bottom: 25px; 
+            background: #ffffff;
+        }
+
+        .bg-kejaksaan { 
+            background-color: var(--primary-color); 
+            color: white; 
+        }
+        
+        /* Modifikasi Input Tabel agar transparan */
+        .table input, 
+        .table select, 
+        .table textarea {
+            background-color: transparent !important;
+            border: 1px solid transparent;
+            box-shadow: none !important;
+            transition: border 0.3s, background-color 0.3s;
+            width: 100%;
+        }
+
+        .table input:focus, 
+        .table select:focus, 
+        .table textarea:focus {
+            border-bottom: 1px solid var(--primary-color);
+            background-color: #f8f9fa !important;
+            outline: none;
+        }
+
+        /* FUNGSI AUTO-HEIGHT TEXTAREA */
+        textarea.auto-height { 
+            overflow: hidden; 
+            resize: none; 
+            min-height: 38px;
+            line-height: 1.5;
+        }
+
+        /* =========================================
+           5. STYLING ELEMEN KHUSUS CETAK
+           ========================================= */
+        #kopSurat, 
+        #tempatTandaTangan { 
+            display: none; 
+        }
+        
+        .tampil-saat-cetak-saja { 
+            display: none; 
+        }
+
+        footer { 
+            font-size: 0.85rem; 
+            color: #6c757d; 
+        }
+
+        /* =========================================
+           6. PENGATURAN CETAK DIPA (PRINT MEDIA)
+           ========================================= */
+        @media print {
+            @page { 
+                size: landscape; 
+                margin: 15mm; 
+            }
+            
+            /* Sembunyikan semua UI Web */
+            .sembunyikan-saat-cetak, 
+            .sheet-tabs-container, 
+            nav, 
+            .btn, 
+            #statusBox { 
+                display: none !important; 
+            }
+            
+            /* Tampilkan elemen Cetak */
+            .tampil-saat-cetak-saja { 
+                display: block !important; 
+            }
+            
+            /* Background kertas */
+            body { 
+                background-color: white !important; 
+                font-size: 12px; 
+            }
+            
+            /* Reset Layout Kartu */
+            .card { 
+                box-shadow: none !important; 
+                border: none !important; 
+                margin: 0; 
+                padding: 0; 
+            }
+            
+            .card-header { 
+                display: none !important; 
+            }
+            
+            /* Tabel Garis Hitam Kertas Kerja */
+            table { 
+                width: 100% !important; 
+                border-collapse: collapse; 
+            }
+            
+            th, td { 
+                border: 1px solid black !important; 
+                padding: 4px !important; 
+            }
+            
+            /* Reset Input agar terlihat seperti teks ketikan */
+            input, textarea, select {
+                border: none !important; 
+                background: transparent !important;
+                appearance: none; 
+                -moz-appearance: none; 
+                -webkit-appearance: none;
+                color: black !important; 
+                padding: 0 !important; 
+                margin: 0 !important;
+                resize: none !important;
+            }
+            
+            /* Blok Area Tanda Tangan & KOP */
+            #kopSurat { 
+                display: block; 
+                margin-bottom: 20px; 
+            }
+            
+            #tempatTandaTangan { 
+                display: block !important; 
+                margin-top: 30px; 
+                page-break-inside: avoid; 
+            }
+            
+            /* Sembunyikan Footer Jalo Tuharea di Dokumen Resmi */
+            footer { 
+                display: none !important; 
+            }
+        }
+    </style>
 </head>
 <body>
 
 <nav class="navbar navbar-dark py-3">
     <div class="container-fluid d-flex justify-content-between align-items-center">
-        <span class="navbar-brand mb-0 h1 fw-bold"><i class="fas fa-file-invoice-dollar me-2"></i> e-RAB Pagu Indikatif (Kertas Kerja Satker)</span>
+        <span class="navbar-brand mb-0 h1 fw-bold">
+            <i class="fas fa-file-invoice-dollar me-2"></i> 
+            e-RAB Pagu Indikatif (Kertas Kerja Satker)
+        </span>
         <div class="d-flex gap-2">
-            <button class="btn btn-light btn-sm text-success fw-bold" onclick="unduhExcel()"><i class="fas fa-file-excel"></i> Download Excel</button>
-            <button class="btn btn-danger btn-sm fw-bold" onclick="window.print()"><i class="fas fa-print"></i> Cetak / PDF</button>
+            <button class="btn btn-light btn-sm text-success fw-bold shadow-sm" onclick="unduhExcel()">
+                <i class="fas fa-file-excel"></i> Download Excel
+            </button>
+            <button class="btn btn-danger btn-sm fw-bold shadow-sm" onclick="window.print()">
+                <i class="fas fa-print"></i> Cetak / PDF
+            </button>
         </div>
     </div>
 </nav>
@@ -132,8 +262,15 @@
 <div class="container-fluid py-4">
     
     <div class="sheet-tabs-container" id="sheetTabs">
-        <div class="sheet-tab active" onclick="pindahSheet(this)">Bidang Pidum <button class="btn-close-sheet" onclick="hapusSheet(this, event)"><i class="fas fa-times"></i></button></div>
-        <button class="btn btn-sm btn-outline-secondary ms-2" onclick="tambahSheetBaru()"><i class="fas fa-plus"></i> Sheet Baru</button>
+        <div class="sheet-tab active" onclick="pindahSheet(this)">
+            Bidang Pidum 
+            <button class="btn-close-sheet" onclick="hapusSheet(this, event)">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <button class="btn btn-sm btn-outline-secondary ms-2 fw-bold" onclick="tambahSheetBaru()">
+            <i class="fas fa-plus"></i> Sheet Baru
+        </button>
     </div>
 
     <div id="statusBox" class="alert alert-success shadow-sm mb-4">
@@ -141,41 +278,43 @@
     </div>
 
     <div class="card">
-        <div class="card-header bg-kejaksaan fw-bold"><i class="fas fa-building"></i> Data Identitas Kertas Kerja</div>
+        <div class="card-header bg-kejaksaan fw-bold">
+            <i class="fas fa-building"></i> Data Identitas Kertas Kerja
+        </div>
         <div class="card-body kop-area">
             <div class="row g-3">
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Kementerian/Lembaga</label>
-                    <input type="text" class="form-control" id="inputKemenLemb" value="(006) Kejaksaan Republik Indonesia">
+                    <label class="form-label text-muted small fw-bold">Kementerian/Lembaga</label>
+                    <input type="text" class="form-control bg-light" id="inputKemenLemb" value="(006) Kejaksaan Republik Indonesia">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Unit Organisasi</label>
-                    <input type="text" class="form-control" id="inputUnitOrg" value="(01) Kejaksaan Republik Indonesia">
+                    <label class="form-label text-muted small fw-bold">Unit Organisasi</label>
+                    <input type="text" class="form-control bg-light" id="inputUnitOrg" value="(01) Kejaksaan Republik Indonesia">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Unit Kerja</label>
-                    <input type="text" class="form-control" id="inputUnitKerja" value="(691164) KEJAKSAAN NEGERI MALUKU TENGGARA">
+                    <label class="form-label text-muted small fw-bold">Unit Kerja</label>
+                    <input type="text" class="form-control bg-light" id="inputUnitKerja" value="(691164) KEJAKSAAN NEGERI MALUKU TENGGARA">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small fw-bold text-danger">Alokasi Pagu Indikatif (Rp)</label>
-                    <input type="text" class="form-control fw-bold" id="inputPagu" placeholder="Contoh: 100.000.000" oninput="formatInputRupiah(this); hitungSemua();">
+                    <input type="text" class="form-control fw-bold border-danger" id="inputPagu" placeholder="Contoh: 100.000.000" oninput="formatInputRupiah(this); hitungSemua();">
                 </div>
                 
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Lokasi & Tanggal TTD</label>
-                    <input type="text" class="form-control" id="inputTanggal" value="Langgur, 31 Desember 2025">
+                    <label class="form-label text-muted small fw-bold">Lokasi & Tanggal TTD</label>
+                    <input type="text" class="form-control bg-light" id="inputTanggal" value="Langgur, 31 Desember 2025">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Jabatan Penandatangan</label>
-                    <input type="text" class="form-control" id="inputJabatan" value="Kepala Kejaksaan Negeri Maluku Tenggara">
+                    <label class="form-label text-muted small fw-bold">Jabatan Penandatangan</label>
+                    <input type="text" class="form-control bg-light" id="inputJabatan" value="Kepala Kejaksaan Negeri Maluku Tenggara">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Nama Pejabat</label>
-                    <input type="text" class="form-control fw-bold" id="inputNamaPejabat" value="NAMA KAJARI, SH., MH.">
+                    <label class="form-label text-muted small fw-bold">Nama Pejabat</label>
+                    <input type="text" class="form-control fw-bold bg-light" id="inputNamaPejabat" value="NAMA KAJARI, SH., MH.">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">NIP / NRP</label>
-                    <input type="text" class="form-control" id="inputNIP" value="Jaksa Utama Pratama NIP. 19700101 199903 1 001">
+                    <label class="form-label text-muted small fw-bold">NIP / NRP</label>
+                    <input type="text" class="form-control bg-light" id="inputNIP" value="Jaksa Utama Pratama NIP. 19700101 199903 1 001">
                 </div>
             </div>
         </div>
@@ -183,29 +322,52 @@
 
     <div id="kopSurat">
         <table style="width: 100%; font-weight: bold; border:none !important;" border="0">
-            <tr><td style="border:none !important; width: 15%;">KEMEN/LEMB</td><td style="border:none !important;" id="cetakKemenLemb"></td></tr>
-            <tr><td style="border:none !important;">UNIT ORG</td><td style="border:none !important;" id="cetakUnitOrg"></td></tr>
-            <tr><td style="border:none !important;">UNIT KERJA</td><td style="border:none !important;" id="cetakUnitKerja"></td></tr>
-            <tr><td style="border:none !important;">ALOKASI</td><td style="border:none !important;">Rp <span id="cetakPagu"></span></td></tr>
+            <tr>
+                <td style="border:none !important; width: 15%;">KEMEN/LEMB</td>
+                <td style="border:none !important;" id="cetakKemenLemb"></td>
+            </tr>
+            <tr>
+                <td style="border:none !important;">UNIT ORG</td>
+                <td style="border:none !important;" id="cetakUnitOrg"></td>
+            </tr>
+            <tr>
+                <td style="border:none !important;">UNIT KERJA</td>
+                <td style="border:none !important;" id="cetakUnitKerja"></td>
+            </tr>
+            <tr>
+                <td style="border:none !important;">ALOKASI</td>
+                <td style="border:none !important;">Rp <span id="cetakPagu"></span></td>
+            </tr>
         </table>
         <h4 style="text-align: center; font-weight: bold; margin-top: 15px;">RINCIAN KERTAS KERJA SATKER</h4>
     </div>
 
-    <div class="card">
-        <div class="card-header bg-kejaksaan d-flex justify-content-between align-items-center">
-            <span class="fw-bold"><i class="fas fa-list"></i> Rincian Anggaran (Hierarki Berjenjang)</span>
-            <span class="fw-bold fs-6">Terpakai: <span id="totalRabDipakai" class="text-warning">Rp 0</span> | Sisa: <span id="sisaPagu" class="text-light">Rp 0</span></span>
+    <div class="card shadow-lg">
+        <div class="card-header bg-kejaksaan d-flex justify-content-between align-items-center py-3">
+            <span class="fw-bold fs-5">
+                <i class="fas fa-list-alt"></i> Rincian Anggaran (Hierarki Berjenjang)
+            </span>
+            <span class="fw-bold fs-6">
+                Terpakai: <span id="totalRabDipakai" class="text-warning">Rp 0</span> | 
+                Sisa: <span id="sisaPagu" class="text-light">Rp 0</span>
+            </span>
         </div>
+        
         <div class="card-body p-0 table-responsive">
-            <table class="table table-bordered mb-0">
+            <table class="table table-bordered table-hover mb-0">
                 <thead class="table-light text-center align-middle" style="font-size: 14px;">
                     <tr>
-                        <th width="12%">KODE</th>
-                        <th width="40%">PROGRAM/KEGIATAN/ KRO/RO/ KOMPONEN/<br>SUBKOMP/DETIL</th>
-                        <th width="12%">VOLUME</th>
-                        <th width="12%">HARGA SATUAN</th>
-                        <th width="14%">JUMLAH BIAYA (2026)</th>
-                        <th width="10%">SD/CP <br> <button class="btn btn-sm btn-primary sembunyikan-saat-cetak mt-1" onclick="tambahBarisDiBawah(null, 1)">+ Baris Utama</button></th>
+                        <th width="12%" class="py-3">KODE</th>
+                        <th width="40%" class="py-3">PROGRAM/KEGIATAN/ KRO/RO/ KOMPONEN/<br>SUBKOMP/DETIL</th>
+                        <th width="12%" class="py-3">VOLUME</th>
+                        <th width="12%" class="py-3">HARGA SATUAN</th>
+                        <th width="14%" class="py-3">JUMLAH BIAYA (2026)</th>
+                        <th width="10%" class="py-3">
+                            SD/CP <br> 
+                            <button class="btn btn-sm btn-primary sembunyikan-saat-cetak mt-2 shadow-sm" onclick="tambahBarisDiBawah(null, 1)">
+                                <i class="fas fa-plus"></i> Baris Utama
+                            </button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody id="rabTableBody">
@@ -220,8 +382,8 @@
                 <td style="width: 70%; border:none !important;"></td>
                 <td style="width: 30%; text-align: left; border:none !important;">
                     <span id="cetakTanggal"></span><br>
-                    <span id="cetakJabatan"></span><br><br><br><br>
-                    <b id="cetakNamaPejabat"></b><br>
+                    <span id="cetakJabatan"></span><br><br><br><br><br>
+                    <b id="cetakNamaPejabat" style="text-decoration: underline;"></b><br>
                     <span id="cetakNIP"></span>
                 </td>
             </tr>
@@ -230,78 +392,150 @@
 
 </div>
 
-<footer class="text-center py-3 mt-auto w-100 bg-light border-top sembunyikan-saat-cetak">
+<footer class="text-center py-3 mt-auto w-100 bg-light border-top sembunyikan-saat-cetak shadow-sm">
     <div class="container">
         <span>&copy; 2026 e-RAB Pagu Indikatif Satker. <b>Dibuat dan dikembangkan oleh: Jalo Tuharea</b>.</span>
     </div>
 </footer>
 
-<script>
-    // --- DROPDOWN SATUAN BAKU ---
-    const satuanOptions = `
-        <optgroup label="SDM & Operasional">
-            <option value="OB">OB</option><option value="OH">OH</option><option value="OJ">OJ</option>
-            <option value="OP">OP</option><option value="OK">OK</option>
-        </optgroup>
-        <optgroup label="Barang & Jasa">
-            <option value="BH">BH</option><option value="Unit">Unit</option><option value="Paket">Paket</option>
-            <option value="Kegiatan">Keg</option><option value="Bulan">Bulan</option>
-        </optgroup>
-        <optgroup label="Output">
-            <option value="Layanan">Layanan</option><option value="Laporan">Laporan</option><option value="Dokumen">Dokumen</option>
-        </optgroup>`;
 
-    // --- MANAJEMEN BARIS HIERARKI 8 LEVEL ---
+<script>
+    /* -----------------------------------------------------------------------
+       1. DATA DROPDOWN SATUAN BAKU
+       (Menampilkan seluruh struktur satuan standar operasional DIPA/POK)
+       ----------------------------------------------------------------------- */
+    const satuanOptions = `
+        <optgroup label="Kategori SDM & Operasional Personel">
+            <option value="OB">OB (Orang / Bulan)</option>
+            <option value="OH">OH (Orang / Hari)</option>
+            <option value="OJ">OJ (Orang / Jam)</option>
+            <option value="OP">OP (Orang / Paket)</option>
+            <option value="OK">OK (Orang / Kegiatan)</option>
+        </optgroup>
+        <optgroup label="Kategori Perjalanan Dinas">
+            <option value="OT">OT (Orang / Tempat)</option>
+            <option value="OKali">OKali (Orang / Kali)</option>
+        </optgroup>
+        <optgroup label="Kategori Barang & Jasa">
+            <option value="BH">BH (Buah)</option>
+            <option value="Unit">Unit</option>
+            <option value="Paket">Paket</option>
+            <option value="Kegiatan">Kegiatan</option>
+            <option value="Bulan">Bulan</option>
+            <option value="Tahun">Tahun</option>
+            <option value="Liter">Liter</option>
+            <option value="Kodi">Kodi</option>
+            <option value="Rim">Rim</option>
+            <option value="Kotak">Kotak</option>
+            <option value="Lembar">Lembar</option>
+            <option value="M2">M2 (Meter Persegi)</option>
+        </optgroup>
+        <optgroup label="Kategori Output Utama & Layanan">
+            <option value="Layanan">Layanan</option>
+            <option value="Laporan">Laporan</option>
+            <option value="Dokumen">Dokumen</option>
+            <option value="Rekomendasi">Rekomendasi</option>
+            <option value="Sertifikat">Sertifikat</option>
+        </optgroup>
+    `;
+
+    /* -----------------------------------------------------------------------
+       2. FUNGSI PENYISIPAN BARIS HIERARKI (LEVEL 1 SAMPAI 8)
+       (Membangun elemen DOM secara terperinci untuk masing-masing level)
+       ----------------------------------------------------------------------- */
     function tambahBarisDiBawah(btnElement, level) {
         const tbody = document.getElementById('rabTableBody');
         const tr = document.createElement('tr');
+        
+        // Simpan nilai level pada custom dataset untuk keperluan kalkulasi
         tr.setAttribute('data-level', level);
         
-        // Background identifikasi level (Sesuai hierarki DIPA)
-        const bgColors = {
-            1: '#d1e7dd', // Program (Hijau)
-            2: '#e2e3e5', // Kegiatan (Abu)
-            3: '#f8d7da', // KRO (Merah Muda)
-            4: '#cff4fc', // RO (Biru Muda)
-            5: '#fcf8e3', // Komponen (Kuning Muda)
-            6: '#e8f4f8', // Sub Komponen
-            7: '#fdfdfe', // Akun Belanja (Nyaris putih)
-            8: '#ffffff'  // Detail Item (Putih murni)
-        };
-        
-        let isBold = level < 8 ? 'fw-bold' : '';
-        let bgColor = bgColors[level] || '#ffffff';
-        let indentPx = level > 1 ? (level - 1) * 15 : 0;
+        // Tentukan Warna Background berdasarkan hierarki DIPA
+        let bgColor = '#ffffff';
+        if (level === 1) bgColor = '#d1e7dd'; // Program
+        if (level === 2) bgColor = '#e2e3e5'; // Kegiatan
+        if (level === 3) bgColor = '#f8d7da'; // KRO
+        if (level === 4) bgColor = '#cff4fc'; // RO
+        if (level === 5) bgColor = '#fcf8e3'; // Komponen
+        if (level === 6) bgColor = '#e8f4f8'; // Sub Komponen
+        if (level === 7) bgColor = '#fdfdfe'; // Akun Belanja
+        if (level === 8) bgColor = '#ffffff'; // Detail Item
         
         tr.style.backgroundColor = bgColor;
         
-        let colVolume = level === 8 ? 
-            `<div class="d-flex gap-1 sembunyikan-saat-cetak">
-                <input type="number" class="form-control input-volume text-center p-1" placeholder="Vol" oninput="hitungSemua()" style="min-width: 40px;">
-                <select class="form-select input-satuan p-1" style="min-width: 60px;">${satuanOptions}</select>
-            </div>
-            <div class="tampil-saat-cetak-saja text-center span-cetak-vol"></div>` : ``;
+        // Ketebalan Teks (Bold untuk Level 1-7, Normal untuk Level 8 Item Belanja)
+        let isBold = '';
+        if (level < 8) {
+            isBold = 'fw-bold';
+        }
+        
+        // Indentasi berjenjang (Mendorong margin ke dalam sesuai kedalaman hierarki)
+        let indentPx = 0;
+        if (level > 1) {
+            indentPx = (level - 1) * 15;
+        }
+        
+        // Buat String HTML untuk Kolom Volume dan Satuan (Eksklusif Level 8)
+        let htmlColVolume = '';
+        if (level === 8) {
+            htmlColVolume = `
+                <div class="d-flex gap-1 sembunyikan-saat-cetak">
+                    <input type="number" class="form-control input-volume text-center p-1 border-secondary shadow-sm" placeholder="Vol" oninput="hitungSemua()" style="min-width: 50px;">
+                    <select class="form-select input-satuan p-1 border-secondary shadow-sm" style="min-width: 80px;" onchange="hitungSemua()">
+                        ${satuanOptions}
+                    </select>
+                </div>
+                <div class="tampil-saat-cetak-saja text-center span-cetak-vol"></div>
+            `;
+        }
             
-        let colHarga = level === 8 ? `<input type="text" class="form-control input-harga text-end" placeholder="Harga" oninput="formatInputRupiah(this); hitungSemua()">` : ``;
+        // Buat String HTML untuk Kolom Harga Satuan (Eksklusif Level 8)
+        let htmlColHarga = '';
+        if (level === 8) {
+            htmlColHarga = `
+                <input type="text" class="form-control input-harga text-end border-secondary shadow-sm" placeholder="Harga" oninput="formatInputRupiah(this); hitungSemua()">
+            `;
+        }
             
-        let html = `
-            <td class="align-top"><input type="text" class="form-control input-kode ${isBold}" placeholder="Kode" style="background:transparent;"></td>
+        // Buat Template Utama Baris (TR)
+        let htmlContent = `
             <td class="align-top">
-                <textarea class="form-control input-uraian auto-height ${isBold}" style="margin-left: ${indentPx}px; width: calc(100% - ${indentPx}px); background:transparent;" rows="1" placeholder="Uraian..."></textarea>
+                <input type="text" class="form-control input-kode ${isBold}" placeholder="Kode" style="background:transparent; border-color: #dee2e6;">
             </td>
-            <td class="align-top">${colVolume}</td>
-            <td class="align-top">${colHarga}</td>
+            
             <td class="align-top">
-                <input type="text" class="form-control input-jumlah text-end fw-bold" placeholder="0" readonly style="background:transparent; color: #1f2937;">
+                <textarea class="form-control input-uraian auto-height ${isBold}" style="margin-left: ${indentPx}px; width: calc(100% - ${indentPx}px); background:transparent; border-color: #dee2e6;" rows="1" placeholder="Ketik Uraian..."></textarea>
             </td>
+            
+            <td class="align-top">
+                ${htmlColVolume}
+            </td>
+            
+            <td class="align-top">
+                ${htmlColHarga}
+            </td>
+            
+            <td class="align-top">
+                <input type="text" class="form-control input-jumlah text-end fw-bold" placeholder="0" readonly style="background:transparent; color: #1f2937; border: none;">
+            </td>
+            
             <td class="align-top text-center">
-                <select class="form-select d-inline-block w-auto mb-1 p-1" style="background:transparent; font-size:12px;">
-                    <option value="RM">RM</option><option value="PNBP">PNBP</option><option value="U">U</option>
+                <select class="form-select d-inline-block w-auto mb-1 p-1 border-secondary shadow-sm" style="background:transparent; font-size:12px;">
+                    <option value="RM">RM</option>
+                    <option value="PNBP">PNBP</option>
+                    <option value="PLN">PLN</option>
+                    <option value="BLU">BLU</option>
+                    <option value="PHLN">PHLN</option>
+                    <option value="U">U</option>
                 </select>
+                
                 <div class="sembunyikan-saat-cetak dropdown mt-1">
-                    <button class="btn btn-sm btn-outline-primary dropdown-toggle p-1" type="button" data-bs-toggle="dropdown" title="Sisipkan di bawah ini"><i class="fas fa-plus"></i></button>
-                    <ul class="dropdown-menu shadow" style="z-index: 1050; font-size:13px;">
-                        <li><h6 class="dropdown-header">Sisipkan Baris:</h6></li>
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle p-1 shadow-sm w-100" type="button" data-bs-toggle="dropdown" title="Sisipkan Hierarki di bawah ini">
+                        <i class="fas fa-plus"></i> Baris
+                    </button>
+                    <ul class="dropdown-menu shadow-lg" style="z-index: 1050; font-size:13px; border-radius: 8px;">
+                        <li><h6 class="dropdown-header fw-bold text-primary">Sisipkan Tingkatan Baris:</h6></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" onclick="tambahBarisDiBawah(this, 1)">1. Program</a></li>
                         <li><a class="dropdown-item" href="#" onclick="tambahBarisDiBawah(this, 2)">2. Kegiatan</a></li>
                         <li><a class="dropdown-item" href="#" onclick="tambahBarisDiBawah(this, 3)">3. KRO</a></li>
@@ -309,145 +543,242 @@
                         <li><a class="dropdown-item" href="#" onclick="tambahBarisDiBawah(this, 5)">5. Komponen</a></li>
                         <li><a class="dropdown-item" href="#" onclick="tambahBarisDiBawah(this, 6)">6. Sub Komponen</a></li>
                         <li><a class="dropdown-item" href="#" onclick="tambahBarisDiBawah(this, 7)">7. Akun Belanja</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="tambahBarisDiBawah(this, 8)">8. Detail Item</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-success fw-bold" href="#" onclick="tambahBarisDiBawah(this, 8)"><i class="fas fa-cart-plus"></i> 8. Detail Item Belanja</a></li>
                     </ul>
-                    <button class="btn btn-sm btn-outline-danger p-1 ms-1" onclick="hapusBaris(this)"><i class="fas fa-trash"></i></button>
+                    <button class="btn btn-sm btn-outline-danger p-1 mt-1 shadow-sm w-100" onclick="hapusBaris(this)" title="Hapus Baris Ini">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>
                 </div>
             </td>
         `;
         
-        tr.innerHTML = html;
+        tr.innerHTML = htmlContent;
         
-        if (btnElement) {
+        // Logika Eksekusi Insert (Sisipkan di antara) atau Append (Tambah di akhir tabel)
+        if (btnElement !== null) {
             let parentRow = btnElement.closest('tr');
             parentRow.parentNode.insertBefore(tr, parentRow.nextSibling);
         } else {
             tbody.appendChild(tr);
         }
+        
+        // Panggil kalkulasi setelah menambah baris baru
         hitungSemua(); 
     }
 
+    /* -----------------------------------------------------------------------
+       3. FUNGSI HAPUS BARIS
+       ----------------------------------------------------------------------- */
     function hapusBaris(btn) {
-        if(confirm('Hapus baris ini beserta nominalnya?')) {
-            btn.closest('tr').remove();
+        if (confirm('Apakah Anda yakin ingin menghapus baris ini beserta nominalnya? Tindakan ini akan mempengaruhi total RAB di atasnya.')) {
+            let baris = btn.closest('tr');
+            baris.remove();
+            
+            // Panggil ulang kalkulasi agar grand total dan status pagu diperbarui
             hitungSemua();
         }
     }
 
-    // --- ALGORITMA PERHITUNGAN HIERARKI (AKUMULASI KE ATAS) ---
+    /* -----------------------------------------------------------------------
+       4. ALGORITMA PERHITUNGAN AKUMULASI BERANTAI (CASCADING ROLL-UP)
+       (Ini adalah otak utama fungsi yang menjumlahkan nominal dari level bawah ke level atas)
+       ----------------------------------------------------------------------- */
     function hitungSemua() {
-        const rows = Array.from(document.querySelectorAll('#rabTableBody tr'));
-        let grandTotal = 0; // Total seluruh item untuk Pagu Indikatif
+        const tbody = document.getElementById('rabTableBody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        let grandTotal = 0; 
         
-        // Pass 1: Kalkulasi Level 8 (Item) dan Reset Total Level Parent
-        rows.forEach(row => {
+        // --- LOOP TAHAP 1: Hitung Level 8 (Item) dan Reset Semua Level Parent ---
+        rows.forEach(function(row) {
             let level = parseInt(row.getAttribute('data-level'));
+            
             if (level === 8) {
-                let vol = parseFloat(row.querySelector('.input-volume').value) || 0;
-                let harga = parseFloat(row.querySelector('.input-harga').value.replace(/[^0-9,-]/g, '')) || 0;
+                // Ambil dan konversi string input volume
+                let inputVol = row.querySelector('.input-volume');
+                let vol = 0;
+                if (inputVol !== null && inputVol.value !== '') {
+                    vol = parseFloat(inputVol.value);
+                }
+
+                // Ambil dan konversi string input harga (buang titik pemisah ribuan)
+                let inputHarga = row.querySelector('.input-harga');
+                let harga = 0;
+                if (inputHarga !== null && inputHarga.value !== '') {
+                    let cleanStr = inputHarga.value.replace(/[^0-9,-]/g, '');
+                    harga = parseFloat(cleanStr);
+                }
+                
+                // Kalkulasi Vol x Harga
                 let total = vol * harga;
                 
-                row.querySelector('.input-jumlah').value = formatRupiah(total.toString());
+                // Tampilkan format hasil Rupiah di form input jumlah
+                let inputJumlah = row.querySelector('.input-jumlah');
+                if (inputJumlah !== null) {
+                    inputJumlah.value = formatRupiah(total.toString());
+                }
+                
+                // Simpan metadata kalkulasi
                 row.dataset.total = total;
                 grandTotal += total;
                 
-                // Sync ke tampilan cetak (agar volume + satuan tetap tampil)
-                let sat = row.querySelector('.input-satuan').value;
-                row.querySelector('.span-cetak-vol').innerText = (vol > 0 ? vol : '') + ' ' + sat;
+                // Sinkronisasi teks agar nilai volume dan satuan tetap tercetak saat Export PDF Native
+                let selectSatuan = row.querySelector('.input-satuan');
+                let spanCetakVol = row.querySelector('.span-cetak-vol');
+                if (selectSatuan !== null && spanCetakVol !== null) {
+                    let satuan = selectSatuan.value;
+                    let textCetak = '';
+                    if (vol > 0) {
+                        textCetak = vol + ' ' + satuan;
+                    }
+                    spanCetakVol.innerText = textCetak;
+                }
             } else {
-                row.dataset.total = 0; // Reset nilai Parent sebelum akumulasi
+                // Nol-kan nilai parent sebelum ditumpuk ulang (mencegah double count)
+                row.dataset.total = 0; 
             }
         });
 
-        // Pass 2: Akumulasi nilai (Roll-up dari Detail ke Program)
-        let activeParents = {1:null, 2:null, 3:null, 4:null, 5:null, 6:null, 7:null};
+        // --- LOOP TAHAP 2: Akumulasi berantai (Menaikkan nilai dari Item Level 8 ke atas) ---
+        let activeParents = {
+            1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null
+        };
         
-        rows.forEach(row => {
+        rows.forEach(function(row) {
             let level = parseInt(row.getAttribute('data-level'));
-            activeParents[level] = row; // Set baris ini sebagai induk aktif di levelnya
             
-            // Putuskan silsilah induk untuk level yang lebih rendah
-            for(let l = level + 1; l <= 7; l++) { activeParents[l] = null; }
+            // Daftarkan baris ini sebagai parent aktif sesuai dengan levelnya
+            activeParents[level] = row; 
             
-            // Jika ini item, tambahkan nilainya ke SEMUA level induk di atasnya yang sedang aktif
+            // Putuskan / hapus silsilah parent untuk kedalaman yang lebih rendah di bawahnya
+            // (Contoh: jika kita menemukan baris KRO Level 3, maka RO/Komp/SubKomp Level 4,5,6,7 harus direset)
+            for (let l = level + 1; l <= 7; l++) { 
+                activeParents[l] = null; 
+            }
+            
+            // Jika kita menemukan Detail Item (Level 8), tembak nilainya ke atas
             if (level === 8) {
                 let totalItem = parseFloat(row.dataset.total) || 0;
+                
                 for (let l = 1; l <= 7; l++) {
-                    if (activeParents[l]) {
-                        let parentSum = parseFloat(activeParents[l].dataset.total) || 0;
-                        activeParents[l].dataset.total = parentSum + totalItem;
+                    if (activeParents[l] !== null) {
+                        let currentSum = parseFloat(activeParents[l].dataset.total) || 0;
+                        activeParents[l].dataset.total = currentSum + totalItem;
                     }
                 }
             }
         });
         
-        // Pass 3: Tampilkan hasil akumulasi ke setiap Baris Parent (Level 1 - 7)
-        rows.forEach(row => {
+        // --- LOOP TAHAP 3: Render tampilan hasil akumulasi ke layar ---
+        rows.forEach(function(row) {
             let level = parseInt(row.getAttribute('data-level'));
+            
             if (level < 8) {
-                row.querySelector('.input-jumlah').value = formatRupiah(row.dataset.total.toString());
+                let accumulatedTotal = parseFloat(row.dataset.total) || 0;
+                let inputJumlah = row.querySelector('.input-jumlah');
+                
+                if (inputJumlah !== null) {
+                    if (accumulatedTotal > 0) {
+                        inputJumlah.value = formatRupiah(accumulatedTotal.toString());
+                    } else {
+                        inputJumlah.value = ''; // Biarkan kosong jika tidak ada isinya
+                    }
+                }
             }
         });
 
-        // Update Pagu dan Notifikasi Over Budget
-        let paguStr = document.getElementById('inputPagu').value.replace(/[^0-9,-]/g, '');
-        let pagu = parseFloat(paguStr) || 0;
-        let selisih = pagu - grandTotal;
+        // --- TAHAP 4: Validasi Total vs Pagu Indikatif ---
+        let strPagu = document.getElementById('inputPagu').value.replace(/[^0-9,-]/g, '');
+        let nominalPagu = parseFloat(strPagu);
+        if (isNaN(nominalPagu)) nominalPagu = 0;
+
+        let selisih = nominalPagu - grandTotal;
         
+        // Terapkan string ke UI Top Bar
         document.getElementById('totalRabDipakai').innerText = 'Rp ' + formatRupiah(grandTotal.toString());
         document.getElementById('sisaPagu').innerText = 'Rp ' + formatRupiah(Math.abs(selisih).toString());
         
+        // Logika Alert Status (Aman / Over Budget)
         let statusBox = document.getElementById('statusBox');
+        let badgeSisa = document.getElementById('sisaPagu').parentElement;
+
         if (selisih < 0) {
+            // Merah jika defisit
             statusBox.className = 'alert alert-danger shadow-sm mb-4';
-            statusBox.innerHTML = '<strong><i class="fas fa-exclamation-triangle"></i> OVER BUDGET!</strong> Total RAB melebihi Pagu Indikatif.';
-            document.getElementById('sisaPagu').parentElement.style.color = '#ffccd5';
+            statusBox.innerHTML = '<strong><i class="fas fa-exclamation-triangle"></i> OVER BUDGET!</strong> Total usulan RAB yang Anda susun ('+ formatRupiah(grandTotal.toString()) +') telah melewati Pagu Indikatif.';
+            badgeSisa.style.color = '#ffccd5';
         } else {
+            // Hijau jika aman
             statusBox.className = 'alert alert-success shadow-sm mb-4';
-            statusBox.innerHTML = '<strong><i class="fas fa-check-circle"></i> AMAN!</strong> Total RAB masih sesuai atau di bawah Pagu Indikatif.';
-            document.getElementById('sisaPagu').parentElement.style.color = '#d1e7dd';
+            statusBox.innerHTML = '<strong><i class="fas fa-check-circle"></i> AMAN!</strong> Total RAB yang disusun masih sesuai atau berada di bawah plafon Pagu Indikatif.';
+            badgeSisa.style.color = '#d1e7dd';
         }
         
+        // Setiap kali hitung, eksekusi sinkronisasi dan simpan memori lokal
         sinkronisasiKopCetak();
-        saveData(); // Auto Save Local Storage
+        saveData(); 
     }
 
-    // --- AUTO WRAP / HEIGHT & AUTO BULLET ---
+    /* -----------------------------------------------------------------------
+       5. EVENT LISTENER: AUTO-WRAP (HEIGHT) & AUTO-BULLET ITEM
+       ----------------------------------------------------------------------- */
     document.addEventListener('input', function(e) {
+        
+        // Target elemen text area dengan kelas auto-height
         if (e.target.classList.contains('auto-height')) {
-            e.target.style.height = 'auto';
-            e.target.style.height = (e.target.scrollHeight) + 'px';
             
-            // Logika Auto-Bullet untuk Item Belanja (Level 8)
-            let level = parseInt(e.target.closest('tr').getAttribute('data-level'));
-            if (level === 8) {
-                if (e.target.value.length === 1 && e.target.value !== '-') {
-                    e.target.value = '- ' + e.target.value;
-                } else if (e.target.value.trim() === '') {
-                    e.target.value = '';
+            // Reset tinggi lalu sesuaikan kembali dengan ukuran scroll
+            e.target.style.height = 'auto'; 
+            e.target.style.height = (e.target.scrollHeight) + 'px'; 
+            
+            // FUNGSI AUTO BULLET STRIP (-) KHUSUS UNTUK ITEM LEVEL 8
+            let row = e.target.closest('tr');
+            if (row !== null) {
+                let level = parseInt(row.getAttribute('data-level'));
+                
+                if (level === 8) {
+                    let val = e.target.value;
+                    
+                    // Trigger: Jika user menekan karakter pertama selain strip
+                    if (val.length === 1 && val !== '-') {
+                        e.target.value = '- ' + val;
+                    } 
+                    // Trigger: Cegah strip menggantung sendirian
+                    else if (val.trim() === '') {
+                        e.target.value = '';
+                    }
                 }
             }
         }
     });
 
-    // --- FORMAT RUPIAH ---
+    /* -----------------------------------------------------------------------
+       6. FUNGSI PEMFORMATAN RUPIAH REAL-TIME
+       ----------------------------------------------------------------------- */
     function formatRupiah(angka) {
-        if(!angka) return '';
+        if (!angka || angka === '') return '';
+        
         let numStr = angka.toString().replace(/[^,\d]/g, '');
         let sisa = numStr.length % 3;
         let rupiah = numStr.substr(0, sisa);
         let ribuan = numStr.substr(sisa).match(/\d{3}/g);
+        
         if (ribuan) {
             let separator = sisa ? '.' : '';
             rupiah += separator + ribuan.join('.');
         }
+        
         return rupiah;
     }
+
+    // Fungsi wrapper untuk ditempel pada onChange/onInput
     function formatInputRupiah(elemen) {
         elemen.value = formatRupiah(elemen.value);
     }
 
-    // --- SINKRONISASI KOP SURAT KE MODE CETAK ---
+    /* -----------------------------------------------------------------------
+       7. FUNGSI SINKRONISASI KOP SURAT KE CETAK PDF (NATIVE PRINT)
+       ----------------------------------------------------------------------- */
     function sinkronisasiKopCetak() {
         document.getElementById('cetakKemenLemb').innerText = ': ' + document.getElementById('inputKemenLemb').value;
         document.getElementById('cetakUnitOrg').innerText = ': ' + document.getElementById('inputUnitOrg').value;
@@ -460,151 +791,307 @@
         document.getElementById('cetakNIP').innerText = document.getElementById('inputNIP').value;
     }
 
-    // --- EXPORT TO EXCEL (NATIVE XLS) ---
+    /* -----------------------------------------------------------------------
+       8. FUNGSI KONVERSI DAN UNDUH EXCEL NATIVE ASLI
+       (Mengubah format HTML menjadi format XLS yang dapat dibaca di MS Excel)
+       ----------------------------------------------------------------------- */
     function unduhExcel() {
-        let activeSheet = document.querySelector('.sheet-tab.active').innerText.replace('×', '').trim();
-        let htmlTable = `
+        let activeTab = document.querySelector('.sheet-tab.active');
+        let namaSheet = activeTab.innerText.replace('×', '').trim();
+        
+        // Membuka deklarasi string XML Office secara utuh
+        let excelContent = `
         <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-        <head><meta charset="utf-8"><style>
-            table { border-collapse: collapse; width: 100%; font-family: Arial; font-size: 11px; }
-            th, td { border: 1px solid black; padding: 4px; vertical-align: top; }
-        </style></head>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; font-size: 11px; }
+                th, td { border: 1px solid black; padding: 4px; vertical-align: top; }
+                .text-center { text-align: center; }
+                .text-right { text-align: right; }
+                .text-bold { font-weight: bold; }
+                .bg-header { background-color: #f2f2f2; }
+                .no-border { border: none !important; }
+            </style>
+        </head>
         <body>
-            <center><h3 style="margin:0;">RINCIAN KERTAS KERJA SATKER</h3></center><br>
+            <center>
+                <h3 style="margin:0;">RINCIAN KERTAS KERJA SATKER</h3>
+            </center>
+            <br>
+            
             <table>
-                <tr><td colspan="2" style="border:none;">KEMEN/LEMB</td><td colspan="4" style="border:none;">: ${document.getElementById('inputKemenLemb').value}</td></tr>
-                <tr><td colspan="2" style="border:none;">UNIT ORG</td><td colspan="4" style="border:none;">: ${document.getElementById('inputUnitOrg').value}</td></tr>
-                <tr><td colspan="2" style="border:none;">UNIT KERJA</td><td colspan="4" style="border:none;">: ${document.getElementById('inputUnitKerja').value}</td></tr>
-                <tr><td colspan="2" style="border:none;">ALOKASI</td><td colspan="4" style="border:none;">: Rp ${document.getElementById('inputPagu').value}</td></tr>
-            </table><br>
+                <tr>
+                    <td colspan="2" class="no-border">KEMEN/LEMB</td>
+                    <td colspan="4" class="no-border">: ${document.getElementById('inputKemenLemb').value}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="no-border">UNIT ORG</td>
+                    <td colspan="4" class="no-border">: ${document.getElementById('inputUnitOrg').value}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="no-border">UNIT KERJA</td>
+                    <td colspan="4" class="no-border">: ${document.getElementById('inputUnitKerja').value}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="no-border">ALOKASI</td>
+                    <td colspan="4" class="no-border">: Rp ${document.getElementById('inputPagu').value}</td>
+                </tr>
+            </table>
+            <br>
+            
             <table>
                 <thead>
-                    <tr style="background:#f2f2f2;">
-                        <th>KODE</th><th>PROGRAM/KEGIATAN/KRO/RO/KOMPONEN/SUBKOMP/DETIL</th>
-                        <th>VOLUME</th><th>HARGA SATUAN</th><th>JUMLAH BIAYA</th><th>SD/CP</th>
+                    <tr class="bg-header text-center text-bold">
+                        <th>KODE</th>
+                        <th>PROGRAM/KEGIATAN/KRO/RO/KOMPONEN/SUBKOMP/DETIL</th>
+                        <th>VOLUME</th>
+                        <th>HARGA SATUAN</th>
+                        <th>JUMLAH BIAYA</th>
+                        <th>SD/CP</th>
                     </tr>
-                </thead><tbody>`;
+                </thead>
+                <tbody>
+        `;
 
-        document.querySelectorAll('#rabTableBody tr').forEach(tr => {
+        const rows = document.querySelectorAll('#rabTableBody tr');
+        
+        rows.forEach(function(tr) {
             let level = parseInt(tr.getAttribute('data-level'));
             let kode = tr.querySelector('.input-kode').value;
-            let uraian = tr.querySelector('.input-uraian').value.replace(/\n/g, '<br>');
-            let spasi = level > 1 ? '&nbsp;'.repeat((level - 1) * 4) : ''; // Indentasi excel
+            
+            // Konversi Enter (\n) pada textarea menjadi <br> di Excel
+            let uraianInput = tr.querySelector('.input-uraian').value;
+            let uraian = uraianInput.replace(/\n/g, '<br>');
+            
+            // Format Indentasi
+            let spasi = '';
+            if (level > 1) {
+                spasi = '&nbsp;'.repeat((level - 1) * 4); 
+            }
             
             let volStr = '';
             let harga = '';
             if (level === 8) {
                 let v = tr.querySelector('.input-volume').value;
                 let s = tr.querySelector('.input-satuan').value;
-                volStr = v ? v + ' ' + s : '';
+                if (v && v !== '') {
+                    volStr = v + ' ' + s;
+                }
                 harga = tr.querySelector('.input-harga').value;
             }
             
             let jumlah = tr.querySelector('.input-jumlah').value;
-            let sdcp = tr.querySelector('select:last-of-type').value;
-            let rowStyle = level < 8 ? 'style="font-weight:bold;"' : '';
+            
+            let sdcpSelects = tr.querySelectorAll('select');
+            let sdcp = sdcpSelects[sdcpSelects.length - 1].value;
+            
+            let trClass = '';
+            if (level < 8) {
+                trClass = 'class="text-bold"';
+            }
 
-            htmlTable += `<tr ${rowStyle}>
-                <td>${kode}</td> <td>${spasi}${uraian}</td>
-                <td style="text-align:center;">${volStr}</td> <td style="text-align:right;">${harga}</td>
-                <td style="text-align:right;">${jumlah}</td> <td style="text-align:center;">${sdcp}</td>
-            </tr>`;
+            excelContent += `
+                <tr ${trClass}>
+                    <td>${kode}</td> 
+                    <td>${spasi}${uraian}</td>
+                    <td class="text-center">${volStr}</td> 
+                    <td class="text-right">${harga}</td>
+                    <td class="text-right">${jumlah}</td> 
+                    <td class="text-center">${sdcp}</td>
+                </tr>
+            `;
         });
 
-        htmlTable += `</tbody></table><br><br>
-            <table>
-                <tr><td colspan="4" style="border:none;"></td><td colspan="2" style="border:none; text-align:left;">${document.getElementById('inputTanggal').value}</td></tr>
-                <tr><td colspan="4" style="border:none;"></td><td colspan="2" style="border:none; text-align:left;">${document.getElementById('inputJabatan').value}</td></tr>
-                <tr><td colspan="4" style="border:none;"></td><td colspan="2" style="border:none; text-align:left;"><br><br><br><b>${document.getElementById('inputNamaPejabat').value}</b><br>${document.getElementById('inputNIP').value}</td></tr>
+        excelContent += `
+                </tbody>
             </table>
-        </body></html>`;
+            <br><br>
+            
+            <table>
+                <tr>
+                    <td colspan="4" class="no-border"></td>
+                    <td colspan="2" class="no-border" style="text-align:left;">${document.getElementById('inputTanggal').value}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="no-border"></td>
+                    <td colspan="2" class="no-border" style="text-align:left;">${document.getElementById('inputJabatan').value}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="no-border"></td>
+                    <td colspan="2" class="no-border" style="text-align:left;">
+                        <br><br><br><br>
+                        <b><u>${document.getElementById('inputNamaPejabat').value}</u></b><br>
+                        ${document.getElementById('inputNIP').value}
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>
+        `;
 
-        const blob = new Blob([htmlTable], { type: 'application/vnd.ms-excel' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `Rincian_Kertas_Kerja_${activeSheet}.xls`;
-        a.click();
+        // Menghasilkan File
+        const blobData = new Blob([excelContent], { type: 'application/vnd.ms-excel' });
+        const downloadUrl = URL.createObjectURL(blobData);
+        const anchor = document.createElement('a');
+        anchor.href = downloadUrl;
+        
+        let safeName = namaSheet.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        anchor.download = `Rincian_Kertas_Kerja_${safeName}.xls`;
+        anchor.click();
     }
 
-    // --- LOCAL STORAGE & MULTI-SHEET LOGIC ---
+    /* -----------------------------------------------------------------------
+       9. MANAJEMEN MULTI-SHEET & LOCAL STORAGE
+       (Menyimpan state dan data secara terisolasi per tab sheet)
+       ----------------------------------------------------------------------- */
     let sheetCount = 1;
+
     function saveData() {
-        document.querySelectorAll('input, textarea, select').forEach(el => {
-            if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.setAttribute('value', el.value);
-            if(el.tagName === 'TEXTAREA') el.innerHTML = el.value;
-            if(el.tagName === 'SELECT') {
-                Array.from(el.options).forEach(opt => {
-                    if (opt.value === el.value) opt.setAttribute('selected', 'selected');
-                    else opt.removeAttribute('selected');
+        const inputs = document.querySelectorAll('input, textarea, select');
+        
+        // Melekatkan nilai real-time ke properti HTML agar bisa disimpan
+        inputs.forEach(function(el) {
+            if (el.tagName === 'INPUT') {
+                el.setAttribute('value', el.value);
+            }
+            if (el.tagName === 'TEXTAREA') {
+                el.innerHTML = el.value;
+            }
+            if (el.tagName === 'SELECT') {
+                const options = Array.from(el.options);
+                options.forEach(function(opt) {
+                    if (opt.value === el.value) {
+                        opt.setAttribute('selected', 'selected');
+                    } else {
+                        opt.removeAttribute('selected');
+                    }
                 });
             }
         });
         
-        let activeSheet = document.querySelector('.sheet-tab.active').innerText.replace('×', '').trim();
-        localStorage.setItem(`RAB_Data_${activeSheet}`, document.getElementById('rabTableBody').innerHTML);
-        localStorage.setItem(`KOP_Data_${activeSheet}`, JSON.stringify({
-            pagu: document.getElementById('inputPagu').value
-        }));
+        let activeTab = document.querySelector('.sheet-tab.active');
+        if (!activeTab) return; 
+
+        let namaSheet = activeTab.innerText.replace('×', '').trim();
+        
+        let tabelIsi = document.getElementById('rabTableBody').innerHTML;
+        localStorage.setItem(`RAB_Data_${namaSheet}`, tabelIsi);
+        
+        let dataKop = {
+            pagu: document.getElementById('inputPagu').value,
+            kemenlemb: document.getElementById('inputKemenLemb').value,
+            unitorg: document.getElementById('inputUnitOrg').value,
+            unitkerja: document.getElementById('inputUnitKerja').value,
+            tanggal: document.getElementById('inputTanggal').value,
+            jabatan: document.getElementById('inputJabatan').value,
+            namapejabat: document.getElementById('inputNamaPejabat').value,
+            nip: document.getElementById('inputNIP').value
+        };
+        localStorage.setItem(`KOP_Data_${namaSheet}`, JSON.stringify(dataKop));
     }
 
-    function loadData(sheetName) {
-        let savedBody = localStorage.getItem(`RAB_Data_${sheetName}`);
-        if(savedBody) {
+    function loadData(namaSheet) {
+        let savedBody = localStorage.getItem(`RAB_Data_${namaSheet}`);
+        
+        if (savedBody) {
             document.getElementById('rabTableBody').innerHTML = savedBody;
         } else {
             document.getElementById('rabTableBody').innerHTML = '';
-            tambahBarisDiBawah(null, 1); // Default Program jika kosong
+            tambahBarisDiBawah(null, 1); // Buat baris default (Program) jika belum ada
         }
         
-        let savedKop = JSON.parse(localStorage.getItem(`KOP_Data_${sheetName}`));
-        if(savedKop) { document.getElementById('inputPagu').value = savedKop.pagu; } 
-        else { document.getElementById('inputPagu').value = ''; }
+        let savedKopJSON = localStorage.getItem(`KOP_Data_${namaSheet}`);
+        if (savedKopJSON) { 
+            let kop = JSON.parse(savedKopJSON);
+            document.getElementById('inputPagu').value = kop.pagu || ''; 
+            document.getElementById('inputKemenLemb').value = kop.kemenlemb || '(006) Kejaksaan Republik Indonesia'; 
+            document.getElementById('inputUnitOrg').value = kop.unitorg || '(01) Kejaksaan Republik Indonesia'; 
+            document.getElementById('inputUnitKerja').value = kop.unitkerja || '(691164) KEJAKSAAN NEGERI MALUKU TENGGARA'; 
+            document.getElementById('inputTanggal').value = kop.tanggal || 'Langgur, 31 Desember 2025'; 
+            document.getElementById('inputJabatan').value = kop.jabatan || 'Kepala Kejaksaan Negeri Maluku Tenggara'; 
+            document.getElementById('inputNamaPejabat').value = kop.namapejabat || 'NAMA KAJARI, SH., MH.'; 
+            document.getElementById('inputNIP').value = kop.nip || 'Jaksa Utama Pratama NIP. 19700101 199903 1 001'; 
+        } else { 
+            document.getElementById('inputPagu').value = ''; 
+        }
         
-        document.querySelectorAll('.auto-height').forEach(t => {
-            t.style.height = 'auto'; t.style.height = (t.scrollHeight) + 'px';
+        let textareas = document.querySelectorAll('.auto-height');
+        textareas.forEach(function(t) {
+            t.style.height = 'auto'; 
+            t.style.height = (t.scrollHeight) + 'px';
         });
+        
         hitungSemua();
     }
 
     function tambahSheetBaru() {
         sheetCount++;
-        let namaSheet = prompt("Masukkan nama Bidang/Sheet baru:", "Bidang " + sheetCount);
-        if(!namaSheet) return;
+        let saranNama = "Bidang " + sheetCount;
+        let namaSheetBaru = prompt("Masukkan nama Bidang/Sheet baru:", saranNama);
+        
+        if (!namaSheetBaru) return; 
         
         let tab = document.createElement('div');
         tab.className = 'sheet-tab';
-        tab.innerHTML = `${namaSheet} <button class="btn-close-sheet" onclick="hapusSheet(this, event)"><i class="fas fa-times"></i></button>`;
+        
+        tab.innerHTML = `${namaSheetBaru} <button class="btn-close-sheet" onclick="hapusSheet(this, event)"><i class="fas fa-times"></i></button>`;
         tab.onclick = function() { pindahSheet(this); };
         
-        document.querySelector('.sheet-tabs-container').insertBefore(tab, document.querySelector('.sheet-tabs-container button'));
+        let container = document.querySelector('.sheet-tabs-container');
+        let buttonPlus = container.querySelector('button.btn-outline-secondary');
+        container.insertBefore(tab, buttonPlus);
+        
         pindahSheet(tab);
     }
 
     function pindahSheet(tabElement) {
-        document.querySelectorAll('.sheet-tab').forEach(t => t.classList.remove('active'));
+        let tabs = document.querySelectorAll('.sheet-tab');
+        tabs.forEach(function(t) {
+            t.classList.remove('active');
+        });
+        
         tabElement.classList.add('active');
+        
         let sheetName = tabElement.innerText.replace('×', '').trim();
         loadData(sheetName);
     }
 
-    function hapusSheet(btn, event) {
+    function hapusSheet(btnElement, event) {
         event.stopPropagation();
-        if(document.querySelectorAll('.sheet-tab').length === 1) {
-            alert("Tidak bisa menghapus sheet terakhir!"); return;
+        
+        let tabs = document.querySelectorAll('.sheet-tab');
+        if (tabs.length === 1) {
+            alert("Peringatan: Anda tidak bisa menghapus sheet terakhir!"); 
+            return;
         }
-        if(confirm("Hapus Sheet ini? Data akan hilang.")) {
-            let tab = btn.parentElement;
+        
+        if (confirm("Apakah Anda yakin ingin menghapus Sheet ini? Seluruh data di dalamnya akan hilang.")) {
+            let tab = btnElement.parentElement;
             let sheetName = tab.innerText.replace('×', '').trim();
+            
             localStorage.removeItem(`RAB_Data_${sheetName}`);
             localStorage.removeItem(`KOP_Data_${sheetName}`);
+            
             tab.remove();
-            pindahSheet(document.querySelector('.sheet-tab'));
+            
+            let tabPertama = document.querySelector('.sheet-tab');
+            pindahSheet(tabPertama);
         }
     }
 
-    window.onload = () => { loadData('Bidang Pidum'); };
-    setInterval(saveData, 2000); // Auto save tiap 2 detik
+    /* -----------------------------------------------------------------------
+       10. INISIALISASI HALAMAN SAAT PERTAMA KALI DIMUAT
+       ----------------------------------------------------------------------- */
+    window.onload = function() { 
+        loadData('Bidang Pidum'); 
+    };
+    
+    // Auto-save berjalan setiap 2 detik secara teratur di latar belakang
+    setInterval(saveData, 2000); 
+    
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
