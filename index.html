@@ -80,7 +80,7 @@
 
     .card { 
         box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-        border: none; 
+        border: none;
         border-radius: 12px;
         margin-bottom: 25px; 
         transition: transform 0.2s ease;
@@ -139,7 +139,7 @@
             background-color: white; 
             counter-reset: page; 
         }
-        nav, .btn, #statusBox, .sembunyikan-saat-cetak, .app-footer, .sheet-tabs-container
+        nav, .btn, #statusBox, .sembunyikan-saat-cetak, .app-footer, .sheet-tabs-container 
         { display: none !important; }
         .container-fluid { padding: 0 !important; }
         .card { box-shadow: none; border: none; margin: 0; }
@@ -195,7 +195,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark mb-3">
 <div class="container py-2">
     <a class="navbar-brand text-white fw-bold fs-4" href="#">
-        <i class="fa-solid fa-landmark-dome me-2"></i> e-RAB Generator <span class="badge bg-light text-dark fs-6 ms-2">v2</span>
+        <i class="fa-solid fa-landmark-dome me-2"></i> e-RAB Generator
+        <span class="badge bg-light text-dark fs-6 ms-2">v2</span>
     </a>
 </div>
 </nav>
@@ -218,40 +219,40 @@
     <div class="card-body p-4 bg-white">
         <div class="row g-3">
             <div class="col-md-12">
-                <label class="fw-bold text-secondary small mb-1">Judul Kertas Kerja</label>
-                <input type="text" class="form-control" id="inputJudul" value="RINCIAN KERTAS KERJA SATKER T.A. 2026" oninput="updatePreview(); simpanKeLokal();">
+               <label class="fw-bold text-secondary small mb-1">Judul Kertas Kerja</label>
+               <input type="text" class="form-control" id="inputJudul" value="RINCIAN KERTAS KERJA SATKER T.A. 2026" oninput="updatePreview(); simpanKeLokal();">
             </div>
             <div class="col-md-4">
-                <label class="fw-bold text-secondary small mb-1">Kementerian/Lembaga</label>
-                <input type="text" class="form-control" id="inputKemen" value="(006) Kejaksaan Republik Indonesia" oninput="updatePreview(); simpanKeLokal();">
+               <label class="fw-bold text-secondary small mb-1">Kementerian/Lembaga</label>
+               <input type="text" class="form-control" id="inputKemen" value="(006) Kejaksaan Republik Indonesia" oninput="updatePreview(); simpanKeLokal();">
             </div>
             <div class="col-md-4">
-                <label class="fw-bold text-secondary small mb-1">Unit Organisasi</label>
-                <input type="text" class="form-control" id="inputUnitOrg" value="(01) Kejaksaan Republik Indonesia" oninput="updatePreview(); simpanKeLokal();">
+               <label class="fw-bold text-secondary small mb-1">Unit Organisasi</label>
+               <input type="text" class="form-control" id="inputUnitOrg" value="(01) Kejaksaan Republik Indonesia" oninput="updatePreview(); simpanKeLokal();">
             </div>
             <div class="col-md-4">
-                <label class="fw-bold text-secondary small mb-1">Unit Kerja</label>
-                <input type="text" class="form-control" id="inputUnitKerja" value="(691164) KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="updatePreview(); simpanKeLokal();">
+               <label class="fw-bold text-secondary small mb-1">Unit Kerja</label>
+               <input type="text" class="form-control" id="inputUnitKerja" value="(691164) KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="updatePreview(); simpanKeLokal();">
             </div>
             <div class="col-md-4">
-                <label class="fw-bold text-secondary small mb-1">Tanggal RAB (Tempat, Tanggal)</label>
-                <input type="text" class="form-control" id="inputTanggal" value="Langgur, 31 Desember 2025" oninput="updatePreview(); simpanKeLokal();">
+               <label class="fw-bold text-secondary small mb-1">Tanggal RAB (Tempat, Tanggal)</label>
+               <input type="text" class="form-control" id="inputTanggal" value="Langgur, 31 Desember 2025" oninput="updatePreview(); simpanKeLokal();">
             </div>
             <div class="col-md-3">
-                <label class="fw-bold text-secondary small mb-1">Jabatan Penandatangan</label>
-                <input type="text" class="form-control" id="inputJabatan" value="KEPALA KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="updatePreview(); simpanKeLokal();">
+               <label class="fw-bold text-secondary small mb-1">Jabatan Penandatangan</label>
+               <input type="text" class="form-control" id="inputJabatan" value="KEPALA KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="updatePreview(); simpanKeLokal();">
             </div>
             <div class="col-md-3">
-                <label class="fw-bold text-secondary small mb-1">Nama Pejabat</label>
-                <input type="text" class="form-control" id="inputNamaPejabat" value="Dr. FADJAR, S.H.,M.H." oninput="updatePreview(); simpanKeLokal();">
+               <label class="fw-bold text-secondary small mb-1">Nama Pejabat</label>
+               <input type="text" class="form-control" id="inputNamaPejabat" value="Dr. FADJAR, S.H.,M.H." oninput="updatePreview(); simpanKeLokal();">
             </div>
             <div class="col-md-2">
-                <label class="fw-bold text-secondary small mb-1">Pangkat / NIP</label>
-                <input type="text" class="form-control" id="inputNIP" value="JAKSA UTAMA PRATAMA NIP. 197411112002121002" oninput="updatePreview(); simpanKeLokal();">
+               <label class="fw-bold text-secondary small mb-1">Pangkat / NIP</label>
+               <input type="text" class="form-control" id="inputNIP" value="JAKSA UTAMA PRATAMA NIP. 197411112002121002" oninput="updatePreview(); simpanKeLokal();">
             </div>
             <div class="col-md-4">
-                <label class="fw-bold text-success small mb-1"><i class="fa-solid fa-wallet me-1"></i> Batas Pagu (Rp)</label>
-                <input type="number" class="form-control fw-bold text-success bg-light" id="inputPagu" value="4779914000" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();">
+               <label class="fw-bold text-success small mb-1"><i class="fa-solid fa-wallet me-1"></i> Batas Pagu (Rp)</label>
+               <input type="number" class="form-control fw-bold text-success bg-light" id="inputPagu" value="4779914000" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();">
             </div>
         </div>
     </div>
@@ -268,20 +269,20 @@
             <td width="20%">Rp. <span id="cetakAlokasi">4,779,914,000</span></td>
         </tr>
         <tr>
-            <td>UNIT ORG</td>
-            <td>:</td>
-            <td id="cetakUnitOrg">(01) Kejaksaan Republik Indonesia</td>
-            <td>Halaman</td>
-            <td>:</td>
-            <td><span class="page-number-print"></span></td>
+           <td>UNIT ORG</td>
+           <td>:</td>
+           <td id="cetakUnitOrg">(01) Kejaksaan Republik Indonesia</td>
+           <td>Halaman</td>
+           <td>:</td>
+           <td><span class="page-number-print"></span></td>
         </tr>
         <tr>
-            <td>UNIT KERJA</td>
-            <td>:</td>
-            <td id="cetakUnitKerja">(691164) KEJAKSAAN NEGERI MALUKU TENGGARA</td>
-            <td></td>
-            <td></td>
-            <td></td>
+           <td>UNIT KERJA</td>
+           <td>:</td>
+           <td id="cetakUnitKerja">(691164) KEJAKSAAN NEGERI MALUKU TENGGARA</td>
+           <td></td>
+           <td></td>
+           <td></td>
         </tr>
     </table>
     
@@ -297,38 +298,38 @@
     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important; border-top-left-radius: 12px; border-top-right-radius: 12px;">
         <h5 class="mb-0 text-white fw-bold"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Rincian Belanja</h5>
         <div>
-            <button class="btn btn-sm btn-primary me-2" onclick="tambahKegiatan()"><i class="fa-solid fa-plus me-1"></i> Tambah Kegiatan (Header)</button>
-            <button class="btn btn-sm btn-success" onclick="tambahItem()"><i class="fa-solid fa-plus me-1"></i> Tambah Item Belanja</button>
+           <button class="btn btn-sm btn-primary me-2" onclick="tambahKegiatan()"><i class="fa-solid fa-plus me-1"></i> Tambah Kegiatan (Header)</button>
+           <button class="btn btn-sm btn-success" onclick="tambahItem()"><i class="fa-solid fa-plus me-1"></i> Tambah Item Belanja</button>
         </div>
     </div>
     <div class="card-body p-0">
         <table class="table table-bordered border-dark mb-0">
             <thead class="table-light text-center align-middle" style="font-size: 13px; font-weight: bold;">
-                <tr>
-                    <th rowspan="2" width="13%">KODE</th>
-                    <th rowspan="2" width="37%">PROGRAM/KEGIATAN/ KRO/RO/<br>KOMPONEN/ SUBKOMP/DETIL</th>
-                    <th rowspan="2" width="12%">VOLUME</th>
-                    <th colspan="2" width="26%">PERHITUNGAN TAHUN 2026</th>
-                    <th rowspan="2" width="6%">SD/<br>CP</th>
-                    <th rowspan="2" width="6%" class="sembunyikan-saat-cetak">Aksi</th>
-                </tr>
-                <tr>
-                    <th width="12%">HARGA SATUAN</th>
-                    <th width="14%">JUMLAH BIAYA</th>
-                </tr>
-                <tr>
-                    <th>(1)</th>
-                    <th>(2)</th>
-                    <th>(3)</th>
-                    <th>(4)</th>
-                    <th>(5)</th>
-                    <th>(6)</th>
-                    <th class="sembunyikan-saat-cetak"></th>
-                </tr>
+               <tr>
+                   <th rowspan="2" width="13%">KODE</th>
+                   <th rowspan="2" width="37%">PROGRAM/KEGIATAN/ KRO/RO/<br>KOMPONEN/ SUBKOMP/DETIL</th>
+                   <th rowspan="2" width="12%">VOLUME</th>
+                   <th colspan="2" width="26%">PERHITUNGAN TAHUN 2026</th>
+                   <th rowspan="2" width="6%">SD/<br>CP</th>
+                   <th rowspan="2" width="6%" class="sembunyikan-saat-cetak">Aksi</th>
+               </tr>
+               <tr>
+                   <th width="12%">HARGA SATUAN</th>
+                   <th width="14%">JUMLAH BIAYA</th>
+               </tr>
+               <tr>
+                   <th>(1)</th>
+                   <th>(2)</th>
+                   <th>(3)</th>
+                   <th>(4)</th>
+                   <th>(5)</th>
+                   <th>(6)</th>
+                   <th class="sembunyikan-saat-cetak"></th>
+               </tr>
             </thead>
             <tbody id="tabelRAB">
-                </tbody>
-        </table>
+               </tbody>
+       </table>
     </div>
 </div>
 
@@ -336,7 +337,7 @@
     <div style="float: right; width: 300px; text-align: left;">
         <p id="cetakTanggal" style="margin-bottom: 5px;">Langgur, 31 Desember 2025</p>
         <p id="cetakJabatan" style="margin-bottom: 70px;">KEPALA KEJAKSAAN NEGERI MALUKU TENGGARA</p>
-        <p><b id="cetakNamaPejabat" style="text-decoration: underline;">Dr. FADJAR, S.H.,M.H.</b><br><span id="cetakNIP">JAKSA UTAMA PRATAMA NIP. 197411112002121002</span></p>
+       <p><b id="cetakNamaPejabat" style="text-decoration: underline;">Dr. FADJAR, S.H.,M.H.</b><br><span id="cetakNIP">JAKSA UTAMA PRATAMA NIP. 197411112002121002</span></p>
     </div>
     <div style="clear: both;"></div>
 </div>
@@ -347,10 +348,10 @@
         <hr class="my-3">
         <button class="btn btn-danger btn-lg mt-2 me-2 px-4 shadow-sm" onclick="window.print()">
             <i class="fa-solid fa-file-pdf me-2"></i> Download PDF / Cetak (Portrait)
-        </button>
+       </button>
         <button class="btn btn-success btn-lg mt-2 px-4 shadow-sm" onclick="downloadExcel()">
             <i class="fa-solid fa-file-excel me-2"></i> Download Excel
-        </button>
+       </button>
     </div>
 </div>
 </div>
@@ -543,24 +544,36 @@ function updatePreview() {
     document.getElementById('cetakNIP').innerText = document.getElementById('inputNIP').value;
 }
 
+// FUNGSI HANDLE AUTO-BULLET PADA ITEM BELANJA
+function handleItemInput(input) {
+    let val = input.value;
+    // Jika user mengetik dan belum diawali dengan tanda '-', otomatis tambahkan '- ' di awal
+    if (val.length > 0 && !val.startsWith('-')) {
+        input.value = '- ' + val.trimStart();
+    } else if (val === '') {
+        input.value = '- ';
+    }
+    simpanKeLokal();
+}
+
 // FUNGSI TAMBAH KEGIATAN
 function tambahKegiatan(kodeVal = '', namaVal = '', volVal = '1.0', satuanVal = 'Kegiatan', sdcpVal = 'RM') {
     const tr = document.createElement('tr');
     tr.className = "kegiatan-row";
     tr.innerHTML = `
-        <td><input type="text" class="form-control" placeholder="Kode" value="${kodeVal}" oninput="simpanKeLokal()"></td>
-        <td><input type="text" class="form-control" placeholder="Nama Kegiatan / Program" value="${namaVal}" oninput="simpanKeLokal()"></td>
+       <td><input type="text" class="form-control" placeholder="Kode" value="${kodeVal}" oninput="simpanKeLokal()"></td>
+       <td><input type="text" class="form-control" placeholder="Nama Kegiatan / Program" value="${namaVal}" oninput="simpanKeLokal()"></td>
         <td>
             <div class="d-flex">
-                <input type="text" class="form-control text-center volume" placeholder="Vol" value="${volVal}" style="width: 50%;" oninput="simpanKeLokal()">
-                <select class="form-control input-satuan text-center" style="width: 50%;" onchange="simpanKeLokal()">
-                    ${dropdownSatuanHTML}
-                </select>
+               <input type="text" class="form-control text-center volume" placeholder="Vol" value="${volVal}" style="width: 50%;" oninput="simpanKeLokal()">
+               <select class="form-control input-satuan text-center" style="width: 50%;" onchange="simpanKeLokal()">
+                   ${dropdownSatuanHTML}
+               </select>
             </div>
         </td>
-        <td><input type="hidden" class="harga" value="0"></td>
-        <td><input type="text" class="form-control text-end jumlah fw-bold" value="0" readonly></td>
-        <td><input type="text" class="form-control text-center sd-cp" placeholder="SD/CP" value="${sdcpVal}" oninput="simpanKeLokal()"></td>
+       <td><input type="hidden" class="harga" value="0"></td>
+       <td><input type="text" class="form-control text-end jumlah fw-bold" value="0" readonly></td>
+       <td><input type="text" class="form-control text-center sd-cp" placeholder="SD/CP" value="${sdcpVal}" oninput="simpanKeLokal()"></td>
         <td class="sembunyikan-saat-cetak"><button class="btn btn-danger btn-sm w-100" onclick="hapusBaris(this)"><i class="fa-solid fa-trash"></i></button></td>
     `;
     tr.querySelector('.input-satuan').value = satuanVal;
@@ -569,24 +582,31 @@ function tambahKegiatan(kodeVal = '', namaVal = '', volVal = '1.0', satuanVal = 
     simpanKeLokal();
 }
 
-// FUNGSI TAMBAH ITEM
+// FUNGSI TAMBAH ITEM (Dengan Auto-Bullet)
 function tambahItem(kodeVal = '', namaVal = '', volVal = '0', satuanVal = 'BLN', hargaVal = '0', sdcpVal = 'RM') {
+    // Pastikan nama item selalu diawali dengan "- " secara otomatis
+    if (namaVal && !namaVal.startsWith('-')) {
+        namaVal = '- ' + namaVal;
+    } else if (!namaVal) {
+        namaVal = '- ';
+    }
+
     const tr = document.createElement('tr');
     tr.className = "item-row";
     tr.innerHTML = `
-        <td><input type="text" class="form-control" placeholder="Kode Akun" value="${kodeVal}" oninput="simpanKeLokal()"></td>
-        <td><input type="text" class="form-control" placeholder="- Uraian rincian..." value="${namaVal}" oninput="simpanKeLokal()"></td>
+       <td><input type="text" class="form-control" placeholder="Kode Akun" value="${kodeVal}" oninput="simpanKeLokal()"></td>
+       <td><input type="text" class="form-control item-name-input" placeholder="- Uraian rincian..." value="${namaVal}" oninput="handleItemInput(this)"></td>
         <td>
             <div class="d-flex">
-                <input type="number" class="form-control text-center volume" value="${volVal}" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();" style="width: 50%;">
-                <select class="form-control input-satuan text-center" style="width: 50%;" onchange="simpanKeLokal()">
-                    ${dropdownSatuanHTML}
-                </select>
+               <input type="number" class="form-control text-center volume" value="${volVal}" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();" style="width: 50%;">
+               <select class="form-control input-satuan text-center" style="width: 50%;" onchange="simpanKeLokal()">
+                   ${dropdownSatuanHTML}
+               </select>
             </div>
         </td>
-        <td><input type="number" class="form-control text-end harga" value="${hargaVal}" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();"></td>
-        <td><input type="text" class="form-control text-end jumlah" value="0" readonly></td>
-        <td><input type="text" class="form-control text-center sd-cp" placeholder="SD/CP" value="${sdcpVal}" oninput="simpanKeLokal()"></td>
+       <td><input type="number" class="form-control text-end harga" value="${hargaVal}" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();"></td>
+       <td><input type="text" class="form-control text-end jumlah" value="0" readonly></td>
+       <td><input type="text" class="form-control text-center sd-cp" placeholder="SD/CP" value="${sdcpVal}" oninput="simpanKeLokal()"></td>
         <td class="sembunyikan-saat-cetak"><button class="btn btn-danger btn-sm w-100" onclick="hapusBaris(this)"><i class="fa-solid fa-trash"></i></button></td>
     `;
     tr.querySelector('.input-satuan').value = satuanVal;
@@ -727,23 +747,25 @@ function muatSheetAktif() {
 function downloadExcel() {
     let currentSheetName = appSheets[currentSheetId] ? appSheets[currentSheetId].name : 'RAB';
     let excelContent = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-        <head><meta charset="utf-8"></head>
+        <html xmlns:o="urn:schemas-microsoft-com:office:office"
+        xmlns:x="urn:schemas-microsoft-com:office:excel"
+        xmlns="http://www.w3.org/TR/REC-html40">
+       <head><meta charset="utf-8"></head>
         <body>
         <table>
             <tr>
-                <td><b>KEMEN/LEMB</b></td><td>:</td><td>${document.getElementById('inputKemen').value}</td>
-                <td><b>ALOKASI</b></td><td>:</td><td>Rp. ${document.getElementById('cetakAlokasi').innerText}</td>
+               <td><b>KEMEN/LEMB</b></td><td>:</td><td>${document.getElementById('inputKemen').value}</td>
+               <td><b>ALOKASI</b></td><td>:</td><td>Rp. ${document.getElementById('cetakAlokasi').innerText}</td>
             </tr>
             <tr>
-                <td><b>UNIT ORG</b></td><td>:</td><td>${document.getElementById('inputUnitOrg').value}</td>
-                <td></td><td></td><td></td>
+               <td><b>UNIT ORG</b></td><td>:</td><td>${document.getElementById('inputUnitOrg').value}</td>
+               <td></td><td></td><td></td>
             </tr>
             <tr>
-                <td><b>UNIT KERJA</b></td><td>:</td><td>${document.getElementById('inputUnitKerja').value}</td>
-                <td></td><td></td><td></td>
+               <td><b>UNIT KERJA</b></td><td>:</td><td>${document.getElementById('inputUnitKerja').value}</td>
+               <td></td><td></td><td></td>
             </tr>
-        </table>
+       </table>
         <br>
         <h3 style="text-align:center;">${document.getElementById('inputJudul').value}</h3>
         <h4 style="text-align:center;">${document.getElementById('cetakSubKemen').innerText}</h4>
@@ -751,14 +773,14 @@ function downloadExcel() {
         <br>
         <table border="1">
             <thead style="background-color:#f0f0f0; text-align:center; font-weight:bold;">
-                <tr>
-                    <th>KODE</th>
-                    <th>PROGRAM/KEGIATAN/ KRO/RO/ KOMPONEN/ SUBKOMP/DETIL</th>
-                    <th>VOLUME</th>
-                    <th>HARGA SATUAN</th>
-                    <th>JUMLAH BIAYA</th>
-                    <th>SD/CP</th>
-                </tr>
+               <tr>
+                   <th>KODE</th>
+                   <th>PROGRAM/KEGIATAN/ KRO/RO/ KOMPONEN/ SUBKOMP/DETIL</th>
+                   <th>VOLUME</th>
+                   <th>HARGA SATUAN</th>
+                   <th>JUMLAH BIAYA</th>
+                   <th>SD/CP</th>
+               </tr>
             </thead>
             <tbody>
     `;
@@ -785,25 +807,25 @@ function downloadExcel() {
             let styleBold = isKegiatan ? 'font-weight:bold; background-color:#e9ecef;' : '';
 
             excelContent += `<tr style="${styleBold}">
-                 <td>${kode}</td>
-                 <td>${nama}</td>
-                 <td style="text-align:center;">${vol}</td>
-                 <td style="text-align:right;">${harga === '0' && isKegiatan ? '' : harga}</td>
-                 <td style="text-align:right;">${jumlah}</td>
-                 <td style="text-align:center;">${sdcp}</td>
+                <td>${kode}</td>
+                <td>${nama}</td>
+                <td style="text-align:center;">${vol}</td>
+                <td style="text-align:right;">${harga === '0' && isKegiatan ? '' : harga}</td>
+                <td style="text-align:right;">${jumlah}</td>
+                <td style="text-align:center;">${sdcp}</td>
             </tr>`;
         }
     });
 
     excelContent += `
             </tbody>
-        </table>
-        <br><br>
+       </table>
+       <br><br>
         <table>
             <tr><td colspan="4"></td><td colspan="2">${document.getElementById('inputTanggal').value}</td></tr>
             <tr><td colspan="4"></td><td colspan="2">${document.getElementById('inputJabatan').value}</td></tr>
             <tr><td colspan="4"></td><td colspan="2"><br><br><br><b>${document.getElementById('inputNamaPejabat').value}</b><br>${document.getElementById('inputNIP').value}</td></tr>
-        </table>
+       </table>
         </body>
         </html>
     `;
