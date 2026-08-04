@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aplikasi e-RAB Pagu Indikatif v2</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    :root {
+        --primary-color: #00564d;
+        --primary-hover: #004138;
+        --bg-gradient: linear-gradient(135deg, #f4f7f6 0%, #e2e8f0 100%);
+    }
+
+    body { 
+        background: var(--bg-gradient); 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+
+    .navbar {
+        background: linear-gradient(135deg, #00564d 0%, #00332c 100%);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .card { 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+        border: none; 
+        border-radius: 12px;
+        margin-bottom: 25px; 
+        transition: transform 0.2s ease;
+        background: #ffffff;
+    }
+
+    .bg-kejaksaan { background-color: var(--primary-color); color: white; }
+    
+    /* Highlight baris kegiatan */
+    .kegiatan-row td { background-color: #eef2f3 !important; font-weight: bold; }
+    .item-row td { background-color: white !important; }
+
+    /* Input kustom agar menyatu */
+    .input-satuan { width: 100%; }
+    
+    /* Style input & select agar rapi di layar */
+    .table input, .table select { border: 1px solid #ced4da; border-radius: 6px; padding: 6px 10px; font-size: 14px; width: 100%; box-sizing: border-box; transition: all 0.2s; }
+    .table input:focus, .table select:focus { outline: none; border-color: #00564d; box-shadow: 0 0 0 0.25rem rgba(0,86,77,.15); }
+
+    /* Modern Buttons */
+    .btn {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 8px 16px;
+        transition: all 0.2s ease;
+    }
+    .btn-primary { background-color: #00564d; border-color: #00564d; }
+    .btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); transform: translateY(-1px); }
+    .btn-success { background-color: #198754; border-color: #198754; }
+    .btn-success:hover { background-color: #157347; transform: translateY(-1px); }
+    .btn-danger { background-color: #dc3545; border-color: #dc3545; }
+    .btn-danger:hover { background-color: #bb2d3b; transform: translateY(-1px); }
+
+    /* Footer Author Modern */
+    .app-footer {
+        background: #ffffff;
+        border-top: 1px solid #e2e8f0;
+        padding: 20px 0;
+        text-align: center;
+        color: #64748b;
+        font-size: 14px;
+        margin-top: auto;
+        box-shadow: 0 -4px 10px rgba(0,0,0,0.02);
+    }
+    .app-footer span {
+        color: #00564d;
+        font-weight: 700;
+    }
+
+    @media print {
+        @page { 
+            size: portrait; 
+            margin: 15mm; 
+        }
+        body { 
+            background-color: white; 
+            counter-reset: page; 
+        }
+        nav, .btn, #statusBox, .sembunyikan-saat-cetak, .app-footer
+        { display: none !important; }
+        .container-fluid { padding: 0 !important; }
+        .card { box-shadow: none; border: none; margin: 0; }
+        .card-header { display: none !important; }
+        .card-body { padding: 0 !important; }
+        
+        /* Tampilan Kop Surat Cetak Presisi */
+        #kopSurat { display: block !important; margin-bottom: 15px; position: relative; font-size: 11px; }
+        #kopSurat table { width: 100%; border-collapse: collapse; font-weight: bold; margin-bottom: 15px; }
+        #kopSurat td { padding: 2px 4px; color: black; vertical-align: top; }
+        
+        /* Penomoran Halaman */
+        .page-number-print::before {
+            content: counter(page);
+        }
+        
+        /* Tampilan Input Saat Dicetak agar Terlihat Seperti Teks Biasa */
+        input.form-control, select.form-control, input.input-satuan, select.input-satuan, input.sd-cp, input.volume, input.harga, input.jumlah { 
+            border: none !important; 
+            background: transparent !important;
+            padding: 0 !important; 
+            margin: 0 !important; 
+            font-size: 11px !important; 
+            color: black !important; 
+            outline: none !important; 
+            box-shadow: none !important; 
+            pointer-events: none !important;
+            width: 100% !important;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .kegiatan-row td input, .kegiatan-row td select { font-weight: bold; }
+        .d-flex { display: flex; gap: 3px; }
+        
+        /* Tampilan Tabel Saat Dicetak menyesuaikan lebar A4 Portrait */
+        .table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+        .table th, .table td { border: 1px solid black !important; padding: 3px !important; color: black !important; }
+        .table th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; color-adjust: exact; font-size: 11px; text-align: center; vertical-align: middle; }
+        .table td { font-size: 11px; vertical-align: top; }
+        
+        /* Sembunyikan kolom aksi */
+        th.sembunyikan-saat-cetak, td.sembunyikan-saat-cetak { display: none !important; }
+        
+        #tempatTandaTangan { display: block !important; margin-top: 30px; page-break-inside: avoid; font-size: 12px; }
+    }
+    
+    #kopSurat, #tempatTandaTangan { display: none; }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+<div class="container py-2">
+    <a class="navbar-brand text-white fw-bold fs-4" href="#">
+        <i class="fa-solid fa-landmark-dome me-2"></i> e-RAB Generator <span class="badge bg-light text-dark fs-6 ms-2">v2</span>
+    </a>
+</div>
+</nav>
+
+<div class="container-fluid px-4" id="areaCetak">
+
+<div class="card sembunyikan-saat-cetak border-0 shadow-sm">
+    <div class="card-header bg-secondary text-white py-3" style="background: linear-gradient(135deg, #475569 0%, #334155 100%) !important; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+        <h6 class="mb-0 fw-bold"><i class="fa-solid fa-sliders me-2"></i> Pengaturan Informasi Kertas Kerja & Pagu</h6>
+    </div>
+    <div class="card-body p-4 bg-white">
+        <div class="row g-3">
+            <div class="col-md-12">
+                <label class="fw-bold text-secondary small mb-1">Judul Kertas Kerja</label>
+                <input type="text" class="form-control" id="inputJudul" value="RINCIAN KERTAS KERJA SATKER T.A. 2026" oninput="updatePreview(); simpanKeLokal();">
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold text-secondary small mb-1">Kementerian/Lembaga</label>
+                <input type="text" class="form-control" id="inputKemen" value="(006) Kejaksaan Republik Indonesia" oninput="updatePreview(); simpanKeLokal();">
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold text-secondary small mb-1">Unit Organisasi</label>
+                <input type="text" class="form-control" id="inputUnitOrg" value="(01) Kejaksaan Republik Indonesia" oninput="updatePreview(); simpanKeLokal();">
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold text-secondary small mb-1">Unit Kerja</label>
+                <input type="text" class="form-control" id="inputUnitKerja" value="(691164) KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="updatePreview(); simpanKeLokal();">
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold text-secondary small mb-1">Tanggal RAB (Tempat, Tanggal)</label>
+                <input type="text" class="form-control" id="inputTanggal" value="Langgur, 31 Desember 2025" oninput="updatePreview(); simpanKeLokal();">
+            </div>
+            <div class="col-md-3">
+                <label class="fw-bold text-secondary small mb-1">Jabatan Penandatangan</label>
+                <input type="text" class="form-control" id="inputJabatan" value="KEPALA KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="updatePreview(); simpanKeLokal();">
+            </div>
+            <div class="col-md-3">
+                <label class="fw-bold text-secondary small mb-1">Nama Pejabat</label>
+                <input type="text" class="form-control" id="inputNamaPejabat" value="Dr. FADJAR, S.H.,M.H." oninput="updatePreview(); simpanKeLokal();">
+            </div>
+            <div class="col-md-2">
+                <label class="fw-bold text-secondary small mb-1">Pangkat / NIP</label>
+                <input type="text" class="form-control" id="inputNIP" value="JAKSA UTAMA PRATAMA NIP. 197411112002121002" oninput="updatePreview(); simpanKeLokal();">
+            </div>
+            <div class="col-md-4">
+                <label class="fw-bold text-success small mb-1"><i class="fa-solid fa-wallet me-1"></i> Batas Pagu (Rp)</label>
+                <input type="number" class="form-control fw-bold text-success bg-light" id="inputPagu" value="4779914000" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="kopSurat">
+    <table>
+        <tr>
+            <td width="14%">KEMEN/LEMB</td>
+            <td width="2%">:</td>
+            <td width="48%" id="cetakKemen">(006) Kejaksaan Republik Indonesia</td>
+            <td width="14%">ALOKASI</td>
+            <td width="2%">:</td>
+            <td width="20%">Rp. <span id="cetakAlokasi">4,779,914,000</span></td>
+        </tr>
+        <tr>
+            <td>UNIT ORG</td>
+            <td>:</td>
+            <td id="cetakUnitOrg">(01) Kejaksaan Republik Indonesia</td>
+            <td>Halaman</td>
+            <td>:</td>
+            <td><span class="page-number-print"></span></td>
+        </tr>
+        <tr>
+            <td>UNIT KERJA</td>
+            <td>:</td>
+            <td id="cetakUnitKerja">(691164) KEJAKSAAN NEGERI MALUKU TENGGARA</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    
+    <div style="text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 13px; line-height: 1.4;">
+        <div id="cetakJudul" style="text-decoration: underline;">RINCIAN KERTAS KERJA SATKER T.A. 2026</div>
+        <div id="cetakSubKemen" style="text-transform: uppercase;">KEJAKSAAN REPUBLIK INDONESIA</div>
+        <div id="cetakSubOrg">Kejaksaan Republik Indonesia</div>
+        <div id="cetakSubKerja" style="text-transform: uppercase;">KEJAKSAAN NEGERI MALUKU TENGGARA</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+        <h5 class="mb-0 text-white fw-bold"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Rincian Belanja</h5>
+        <div>
+            <button class="btn btn-sm btn-primary me-2" onclick="tambahKegiatan()"><i class="fa-solid fa-plus me-1"></i> Tambah Kegiatan (Header)</button>
+            <button class="btn btn-sm btn-success" onclick="tambahItem()"><i class="fa-solid fa-plus me-1"></i> Tambah Item Belanja</button>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-bordered border-dark mb-0">
+            <thead class="table-light text-center align-middle" style="font-size: 13px; font-weight: bold;">
+                <tr>
+                    <th rowspan="2" width="13%">KODE</th>
+                    <th rowspan="2" width="37%">PROGRAM/KEGIATAN/ KRO/RO/<br>KOMPONEN/ SUBKOMP/DETIL</th>
+                    <th rowspan="2" width="12%">VOLUME</th>
+                    <th colspan="2" width="26%">PERHITUNGAN TAHUN 2026</th>
+                    <th rowspan="2" width="6%">SD/<br>CP</th>
+                    <th rowspan="2" width="6%" class="sembunyikan-saat-cetak">Aksi</th>
+                </tr>
+                <tr>
+                    <th width="12%">HARGA SATUAN</th>
+                    <th width="14%">JUMLAH BIAYA</th>
+                </tr>
+                <tr>
+                    <th>(1)</th>
+                    <th>(2)</th>
+                    <th>(3)</th>
+                    <th>(4)</th>
+                    <th>(5)</th>
+                    <th>(6)</th>
+                    <th class="sembunyikan-saat-cetak"></th>
+                </tr>
+            </thead>
+            <tbody id="tabelRAB">
+                <!-- Baris default akan dimuat via LocalStorage / Inisialisasi awal -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="tempatTandaTangan">
+    <div style="float: right; width: 300px; text-align: left;">
+        <p id="cetakTanggal" style="margin-bottom: 5px;">Langgur, 31 Desember 2025</p>
+        <p id="cetakJabatan" style="margin-bottom: 70px;">KEPALA KEJAKSAAN NEGERI MALUKU TENGGARA</p>
+        <p><b id="cetakNamaPejabat" style="text-decoration: underline;">Dr. FADJAR, S.H.,M.H.</b><br><span id="cetakNIP">JAKSA UTAMA PRATAMA NIP. 197411112002121002</span></p>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+
+<div class="card sembunyikan-saat-cetak mt-3 shadow-sm">
+    <div class="card-body text-center p-4" id="statusBox">
+        <h4 id="teksStatus" class="text-success fw-bold">✅ AMAN (Sisa: Rp 0)</h4>
+        <hr class="my-3">
+        <button class="btn btn-danger btn-lg mt-2 me-2 px-4 shadow-sm" onclick="window.print()">
+            <i class="fa-solid fa-file-pdf me-2"></i> Download PDF / Cetak (Portrait)
+        </button>
+        <button class="btn btn-success btn-lg mt-2 px-4 shadow-sm" onclick="downloadExcel()">
+            <i class="fa-solid fa-file-excel me-2"></i> Download Excel
+        </button>
+    </div>
+</div>
+</div>
+
+<footer class="app-footer sembunyikan-saat-cetak">
+  <div class="container">
+      <p class="mb-0">Aplikasi e-RAB Pagu Indikatif | Dibuat dan dikembangkan oleh: <span>Jalo Tuharea</span></p>
+  </div>
+</footer>
+
+<script>
+// Kumpulan Opsi Dropdown Kategori Tersentralisasi
+const dropdownSatuanHTML = `
+    <option value="">- Pilih Satuan -</option>
+    <option value="Kegiatan">Kegiatan</option>
+    <optgroup label="1. SDM & Operasional Personel">
+        <option value="OB">OB (Orang / Bulan)</option>
+        <option value="OH">OH (Orang / Hari)</option>
+        <option value="OJ">OJ (Orang / Jam)</option>
+        <option value="OP">OP (Orang / Paket)</option>
+        <option value="OK">OK (Orang / Kegiatan)</option>
+    </optgroup>
+    <optgroup label="2. Perjalanan Dinas">
+        <option value="OP">OP (Orang / Perjalanan)</option>
+        <option value="OK">OK (Orang / Kali)</option>
+        <option value="OH">OH (Orang / Hari)</option>
+    </optgroup>
+    <optgroup label="3. Pengadaan Barang & Logistik">
+        <option value="PKT">PKT (Paket)</option>
+        <option value="Ktk">Ktk / Box</option>
+        <option value="Rim">Rim</option>
+        <option value="Lbr">Lbr (Lembar)</option>
+        <option value="Buah">Buah</option>
+        <option value="Unit">Unit</option>
+        <option value="Blth">Blth (Bulan / Tahun)</option>
+    </optgroup>
+    <optgroup label="4. Output Utama & Layanan">
+        <option value="Layanan">Layanan</option>
+        <option value="Dokumen">Dokumen / Laporan</option>
+        <option value="Rekomendasi">Rekomendasi / Sertifikat</option>
+    </optgroup>
+`;
+
+// FUNGSI UPDATE DATA KOP & TANDA TANGAN
+function updatePreview() {
+    document.getElementById('cetakJudul').innerText = document.getElementById('inputJudul').value;
+    document.getElementById('cetakKemen').innerText = document.getElementById('inputKemen').value;
+    document.getElementById('cetakUnitOrg').innerText = document.getElementById('inputUnitOrg').value;
+    document.getElementById('cetakUnitKerja').innerText = document.getElementById('inputUnitKerja').value;
+    
+    let kemenText = document.getElementById('inputKemen').value;
+    let orgText = document.getElementById('inputUnitOrg').value;
+    let kerjaText = document.getElementById('inputUnitKerja').value;
+    
+    // Membersihkan teks dalam kurung untuk judul tengah
+    document.getElementById('cetakSubKemen').innerText = kemenText.replace(/^\(.*?_?\)\s*/, '').toUpperCase();
+    document.getElementById('cetakSubOrg').innerText = orgText.replace(/^\(.*?_?\)\s*/, '');
+    document.getElementById('cetakSubKerja').innerText = kerjaText.replace(/^\(.*?_?\)\s*/, '').toUpperCase();
+
+    document.getElementById('cetakTanggal').innerText = document.getElementById('inputTanggal').value;
+    document.getElementById('cetakJabatan').innerText = document.getElementById('inputJabatan').value;
+    document.getElementById('cetakNamaPejabat').innerText = document.getElementById('inputNamaPejabat').value;
+    document.getElementById('cetakNIP').innerText = document.getElementById('inputNIP').value;
+}
+
+// FUNGSI TAMBAH KEGIATAN
+function tambahKegiatan(kodeVal = '', namaVal = '', volVal = '1.0', satuanVal = 'Kegiatan', sdcpVal = 'RM') {
+    const tr = document.createElement('tr');
+    tr.className = "kegiatan-row";
+    tr.innerHTML = `
+        <td><input type="text" class="form-control" placeholder="Kode" value="${kodeVal}" oninput="simpanKeLokal()"></td>
+        <td><input type="text" class="form-control" placeholder="Nama Kegiatan / Program" value="${namaVal}" oninput="simpanKeLokal()"></td>
+        <td>
+            <div class="d-flex">
+                <input type="text" class="form-control text-center volume" placeholder="Vol" value="${volVal}" style="width: 50%;" oninput="simpanKeLokal()">
+                <select class="form-control input-satuan text-center" style="width: 50%;" onchange="simpanKeLokal()">
+                    ${dropdownSatuanHTML}
+                </select>
+            </div>
+        </td>
+        <td><input type="hidden" class="harga" value="0"></td>
+        <td><input type="text" class="form-control text-end jumlah fw-bold" value="0" readonly></td>
+        <td><input type="text" class="form-control text-center sd-cp" placeholder="SD/CP" value="${sdcpVal}" oninput="simpanKeLokal()"></td>
+        <td class="sembunyikan-saat-cetak"><button class="btn btn-danger btn-sm w-100" onclick="hapusBaris(this)"><i class="fa-solid fa-trash"></i></button></td>
+    `;
+    tr.querySelector('.input-satuan').value = satuanVal;
+    document.getElementById('tabelRAB').appendChild(tr);
+    hitungTotal();
+    simpanKeLokal();
+}
+
+// FUNGSI TAMBAH ITEM
+function tambahItem(kodeVal = '', namaVal = '', volVal = '0', satuanVal = 'BLN', hargaVal = '0', sdcpVal = 'RM') {
+    const tr = document.createElement('tr');
+    tr.className = "item-row";
+    tr.innerHTML = `
+        <td><input type="text" class="form-control" placeholder="Kode Akun" value="${kodeVal}" oninput="simpanKeLokal()"></td>
+        <td><input type="text" class="form-control" placeholder="- Uraian rincian..." value="${namaVal}" oninput="simpanKeLokal()"></td>
+        <td>
+            <div class="d-flex">
+                <input type="number" class="form-control text-center volume" value="${volVal}" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();" style="width: 50%;">
+                <select class="form-control input-satuan text-center" style="width: 50%;" onchange="simpanKeLokal()">
+                    ${dropdownSatuanHTML}
+                </select>
+            </div>
+        </td>
+        <td><input type="number" class="form-control text-end harga" value="${hargaVal}" onkeyup="hitungTotal(); simpanKeLokal();" onchange="hitungTotal(); simpanKeLokal();"></td>
+        <td><input type="text" class="form-control text-end jumlah" value="0" readonly></td>
+        <td><input type="text" class="form-control text-center sd-cp" placeholder="SD/CP" value="${sdcpVal}" oninput="simpanKeLokal()"></td>
+        <td class="sembunyikan-saat-cetak"><button class="btn btn-danger btn-sm w-100" onclick="hapusBaris(this)"><i class="fa-solid fa-trash"></i></button></td>
+    `;
+    tr.querySelector('.input-satuan').value = satuanVal;
+    document.getElementById('tabelRAB').appendChild(tr);
+    hitungTotal();
+    simpanKeLokal();
+}
+
+function hapusBaris(button) { 
+    button.closest('tr').remove(); 
+    hitungTotal(); 
+    simpanKeLokal();
+}
+
+function formatRupiah(angka) {
+    return new Intl.NumberFormat("en-US", { minimumFractionDigits: 0 }).format(angka).replace(/,/g, '.');
+}
+
+// FUNGSI KALKULATOR TOTAL
+function hitungTotal() {
+    let pagu = parseFloat(document.getElementById('inputPagu').value) || 0;
+    let grandTotal = 0;
+    
+    const rows = document.querySelectorAll('#tabelRAB tr');
+    let kegiatanTotalSementara = 0;
+
+    for (let i = rows.length - 1; i >= 0; i--) {
+        let row = rows[i];
+        
+        if (row.classList.contains('item-row')) {
+            let vol = parseFloat(row.querySelector('.volume').value) || 0;
+            let hrg = parseFloat(row.querySelector('.harga').value) || 0;
+            let jml = vol * hrg;
+            row.querySelector('.jumlah').value = formatRupiah(jml);
+            
+            kegiatanTotalSementara += jml;
+            grandTotal += jml;
+        } 
+        else if (row.classList.contains('kegiatan-row')) {
+            row.querySelector('.jumlah').value = formatRupiah(kegiatanTotalSementara);
+            kegiatanTotalSementara = 0; 
+        }
+    }
+
+    document.getElementById('cetakAlokasi').innerText = formatRupiah(pagu);
+
+    const statusBox = document.getElementById('statusBox');
+    const teksStatus = document.getElementById('teksStatus');
+
+    if (grandTotal > pagu) {
+        statusBox.className = "card-body text-center bg-danger text-white p-4";
+        teksStatus.innerHTML = `❌ OVER BUDGET<br><small>Total Usulan: Rp ${formatRupiah(grandTotal)} | Kelebihan: Rp ${formatRupiah(grandTotal - pagu)}</small>`;
+        teksStatus.className = "text-white fw-bold";
+    } else {
+        statusBox.className = "card-body text-center bg-light text-dark p-4";
+        teksStatus.innerHTML = `✅ AMAN<br><small>Total Usulan: Rp ${formatRupiah(grandTotal)} | Sisa Pagu: Rp ${formatRupiah(pagu - grandTotal)}</small>`;
+        teksStatus.className = "text-success fw-bold";
+    }
+} 
+
+// FUNGSI SIMPAN KE LOCAL STORAGE
+function simpanKeLokal() {
+    const headerData = {
+        judul: document.getElementById('inputJudul').value,
+        kemen: document.getElementById('inputKemen').value,
+        unitOrg: document.getElementById('inputUnitOrg').value,
+        unitKerja: document.getElementById('inputUnitKerja').value,
+        tanggal: document.getElementById('inputTanggal').value,
+        jabatan: document.getElementById('inputJabatan').value,
+        namaPejabat: document.getElementById('inputNamaPejabat').value,
+        nip: document.getElementById('inputNIP').value,
+        pagu: document.getElementById('inputPagu').value
+    };
+
+    const rowsData = [];
+    const rows = document.querySelectorAll('#tabelRAB tr');
+    rows.forEach(row => {
+        let isKegiatan = row.classList.contains('kegiatan-row');
+        let inputs = row.querySelectorAll('input');
+        let select = row.querySelector('select');
+        
+        if(inputs.length > 0) {
+            rowsData.push({
+                type: isKegiatan ? 'kegiatan' : 'item',
+                kode: inputs[0].value,
+                nama: inputs[1].value,
+                vol: row.querySelector('.volume').value,
+                satuan: select ? select.value : '',
+                harga: isKegiatan ? '0' : row.querySelector('.harga').value,
+                sdcp: row.querySelector('.sd-cp').value
+            });
+        }
+    });
+
+    const appData = {
+        header: headerData,
+        rows: rowsData
+    };
+
+    localStorage.setItem('e_rab_data_v2', JSON.stringify(appData));
+}
+
+// FUNGSI MUAT DARI LOCAL STORAGE
+function muatDariLokal() {
+    const savedData = localStorage.getItem('e_rab_data_v2');
+    if(savedData) {
+        try {
+            const appData = JSON.parse(savedData);
+            if(appData.header) {
+                document.getElementById('inputJudul').value = appData.header.judul ?? document.getElementById('inputJudul').value;
+                document.getElementById('inputKemen').value = appData.header.kemen ?? document.getElementById('inputKemen').value;
+                document.getElementById('inputUnitOrg').value = appData.header.unitOrg ?? document.getElementById('inputUnitOrg').value;
+                document.getElementById('inputUnitKerja').value = appData.header.unitKerja ?? document.getElementById('inputUnitKerja').value;
+                document.getElementById('inputTanggal').value = appData.header.tanggal ?? document.getElementById('inputTanggal').value;
+                document.getElementById('inputJabatan').value = appData.header.jabatan ?? document.getElementById('inputJabatan').value;
+                document.getElementById('inputNamaPejabat').value = appData.header.namaPejabat ?? document.getElementById('inputNamaPejabat').value;
+                document.getElementById('inputNIP').value = appData.header.nip ?? document.getElementById('inputNIP').value;
+                document.getElementById('inputPagu').value = appData.header.pagu ?? document.getElementById('inputPagu').value;
+            }
+
+            const tabelRAB = document.getElementById('tabelRAB');
+            tabelRAB.innerHTML = '';
+
+            if(appData.rows && appData.rows.length > 0) {
+                appData.rows.forEach(r => {
+                    if(r.type === 'kegiatan') {
+                        tambahKegiatan(r.kode, r.nama, r.vol, r.satuan, r.sdcp);
+                    } else {
+                        tambahItem(r.kode, r.nama, r.vol, r.satuan, r.harga, r.sdcp);
+                    }
+                });
+                return;
+            }
+        } catch(e) {
+            console.error("Gagal memuat local storage", e);
+        }
+    }
+
+    // Default baris awal jika belum ada data tersimpan
+    tambahKegiatan("006.01.BF", "Program Penegakan dan Pelayanan Hukum", "1.0", "Kegiatan", "RM");
+    tambahItem("521211", "- Belanja Bahan", "12", "BLN", "1500000", "RM");
+}
+
+// FUNGSI DOWNLOAD KE EXCEL ASLI
+function downloadExcel() {
+    let excelContent = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="utf-8"></head>
+        <body>
+        <table>
+            <tr>
+                <td><b>KEMEN/LEMB</b></td><td>:</td><td>${document.getElementById('inputKemen').value}</td>
+                <td><b>ALOKASI</b></td><td>:</td><td>Rp. ${document.getElementById('cetakAlokasi').innerText}</td>
+            </tr>
+            <tr>
+                <td><b>UNIT ORG</b></td><td>:</td><td>${document.getElementById('inputUnitOrg').value}</td>
+                <td></td><td></td><td></td>
+            </tr>
+            <tr>
+                <td><b>UNIT KERJA</b></td><td>:</td><td>${document.getElementById('inputUnitKerja').value}</td>
+                <td></td><td></td><td></td>
+            </tr>
+        </table>
+        <br>
+        <h3 style="text-align:center;">${document.getElementById('inputJudul').value}</h3>
+        <h4 style="text-align:center;">${document.getElementById('cetakSubKemen').innerText}</h4>
+        <br>
+        <table border="1">
+            <thead style="background-color:#f0f0f0; text-align:center; font-weight:bold;">
+                <tr>
+                    <th>KODE</th>
+                    <th>PROGRAM/KEGIATAN/ KRO/RO/ KOMPONEN/ SUBKOMP/DETIL</th>
+                    <th>VOLUME</th>
+                    <th>HARGA SATUAN</th>
+                    <th>JUMLAH BIAYA</th>
+                    <th>SD/CP</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    // Proses membaca baris demi baris tabel HTML
+    const rows = document.querySelectorAll('#tabelRAB tr');
+    rows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        
+        if (inputs.length > 0) {
+            let isKegiatan = row.classList.contains('kegiatan-row');
+            
+            let kode = inputs[0].value;
+            let nama = inputs[1].value;
+            
+            let volVal = row.querySelector('.volume') ? row.querySelector('.volume').value : '';
+            let volUnit = row.querySelector('.input-satuan') ? row.querySelector('.input-satuan').value : '';
+            let vol = `${volVal} ${volUnit}`;
+            
+            let harga = row.querySelector('.harga') ? row.querySelector('.harga').value : '0';
+            let jumlah = row.querySelector('.jumlah') ? row.querySelector('.jumlah').value : '0';
+            let sdcp = row.querySelector('.sd-cp') ? row.querySelector('.sd-cp').value : '';
+            
+            let styleBold = isKegiatan ? 'font-weight:bold; background-color:#e9ecef;' : '';
+
+            excelContent += `<tr style="${styleBold}">
+                 <td>${kode}</td>
+                 <td>${nama}</td>
+                 <td style="text-align:center;">${vol}</td>
+                 <td style="text-align:right;">${harga === '0' && isKegiatan ? '' : harga}</td>
+                 <td style="text-align:right;">${jumlah}</td>
+                 <td style="text-align:center;">${sdcp}</td>
+            </tr>`;
+        }
+    });
+
+    excelContent += `
+            </tbody>
+        </table>
+        <br><br>
+        <table>
+            <tr><td colspan="4"></td><td colspan="2">${document.getElementById('inputTanggal').value}</td></tr>
+            <tr><td colspan="4"></td><td colspan="2">${document.getElementById('inputJabatan').value}</td></tr>
+            <tr><td colspan="4"></td><td colspan="2"><br><br><br><b>${document.getElementById('inputNamaPejabat').value}</b><br>${document.getElementById('inputNIP').value}</td></tr>
+        </table>
+        </body>
+        </html>
+    `;
+
+    const blob = new Blob([excelContent], { type: 'application/vnd.ms-excel' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Rincian_Kertas_Kerja_Satker.xls';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+} 
+
+window.onload = function() {
+    muatDariLokal();
+    updatePreview();
+    hitungTotal();
+};
+</script>
+
+</body>
+</html>
