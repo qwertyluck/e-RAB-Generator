@@ -30,6 +30,54 @@
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
+    /* Style Tab Sheet */
+    .sheet-tabs-container {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 10px 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .sheet-tab {
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        color: #475569;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+    }
+    .sheet-tab:hover {
+        background: #e2e8f0;
+    }
+    .sheet-tab.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+        box-shadow: 0 2px 8px rgba(0,86,77,0.25);
+    }
+    .sheet-tab .btn-close-sheet {
+        font-size: 11px;
+        padding: 2px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.1);
+        color: inherit;
+        border: none;
+        cursor: pointer;
+    }
+    .sheet-tab.active .btn-close-sheet {
+        background: rgba(255,255,255,0.2);
+    }
+
     .card { 
         box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
         border: none; 
@@ -91,7 +139,7 @@
             background-color: white; 
             counter-reset: page; 
         }
-        nav, .btn, #statusBox, .sembunyikan-saat-cetak, .app-footer
+        nav, .btn, #statusBox, .sembunyikan-saat-cetak, .app-footer, .sheet-tabs-container
         { display: none !important; }
         .container-fluid { padding: 0 !important; }
         .card { box-shadow: none; border: none; margin: 0; }
@@ -144,7 +192,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+<nav class="navbar navbar-expand-lg navbar-dark mb-3">
 <div class="container py-2">
     <a class="navbar-brand text-white fw-bold fs-4" href="#">
         <i class="fa-solid fa-landmark-dome me-2"></i> e-RAB Generator <span class="badge bg-light text-dark fs-6 ms-2">v2</span>
@@ -153,6 +201,15 @@
 </nav>
 
 <div class="container-fluid px-4" id="areaCetak">
+
+<div class="sheet-tabs-container sembunyikan-saat-cetak mb-3">
+    <div id="sheetTabsList" class="d-flex align-items-center gap-2 overflow-auto" style="flex: 1;">
+        </div>
+    <div class="d-flex gap-2 flex-shrink-0 ms-2">
+        <button class="btn btn-sm btn-outline-success" onclick="tambahSheetBaru()"><i class="fa-solid fa-plus me-1"></i> Buat Sheet Baru</button>
+        <button class="btn btn-sm btn-outline-primary" onclick="duplikatSheetAktif()"><i class="fa-solid fa-copy me-1"></i> Salin Sheet Ini</button>
+    </div>
+</div>
 
 <div class="card sembunyikan-saat-cetak border-0 shadow-sm">
     <div class="card-header bg-secondary text-white py-3" style="background: linear-gradient(135deg, #475569 0%, #334155 100%) !important; border-top-left-radius: 12px; border-top-right-radius: 12px;">
@@ -270,8 +327,7 @@
                 </tr>
             </thead>
             <tbody id="tabelRAB">
-                <!-- Baris default akan dimuat via LocalStorage / Inisialisasi awal -->
-            </tbody>
+                </tbody>
         </table>
     </div>
 </div>
@@ -337,6 +393,133 @@ const dropdownSatuanHTML = `
         <option value="Rekomendasi">Rekomendasi / Sertifikat</option>
     </optgroup>
 `;
+
+// MANAJEMEN MULTI-SHEET
+let appSheets = {};
+let currentSheetId = 'sheet_utama';
+
+function initMultiSheet() {
+    const saved = localStorage.getItem('e_rab_sheets_data_v2');
+    if (saved) {
+        try {
+            appSheets = JSON.parse(saved);
+        } catch(e) {
+            appSheets = {};
+        }
+    }
+    
+    if (!appSheets || Object.keys(appSheets).length === 0) {
+        appSheets = {
+            'sheet_utama': {
+                name: 'Bidang Pembinaan',
+                header: {
+                    judul: 'RINCIAN KERTAS KERJA SATKER T.A. 2026',
+                    kemen: '(006) Kejaksaan Republik Indonesia',
+                    unitOrg: '(01) Kejaksaan Republik Indonesia',
+                    unitKerja: '(691164) KEJAKSAAN NEGERI MALUKU TENGGARA',
+                    tanggal: 'Langgur, 31 Desember 2025',
+                    jabatan: 'KEPALA KEJAKSAAN NEGERI MALUKU TENGGARA',
+                    namaPejabat: 'Dr. FADJAR, S.H.,M.H.',
+                    nip: 'JAKSA UTAMA PRATAMA NIP. 197411112002121002',
+                    pagu: '4779914000'
+                },
+                rows: [
+                    { type: 'kegiatan', kode: '006.01.BF', nama: 'Program Penegakan dan Pelayanan Hukum', vol: '1.0', satuan: 'Kegiatan', harga: '0', sdcp: 'RM' },
+                    { type: 'item', kode: '521211', nama: '- Belanja Bahan', vol: '12', satuan: 'BLN', harga: '1500000', sdcp: 'RM' }
+                ]
+            }
+        };
+        currentSheetId = 'sheet_utama';
+    } else {
+        currentSheetId = Object.keys(appSheets)[0];
+    }
+    renderSheetTabs();
+    muatSheetAktif();
+}
+
+function renderSheetTabs() {
+    const listContainer = document.getElementById('sheetTabsList');
+    listContainer.innerHTML = '';
+    
+    Object.keys(appSheets).forEach(id => {
+        let sheet = appSheets[id];
+        let isActive = (id === currentSheetId);
+        
+        let btn = document.createElement('div');
+        btn.className = `sheet-tab ${isActive ? 'active' : ''}`;
+        btn.innerHTML = `
+            <span onclick="pindahSheet('${id}')" style="cursor: pointer;"><i class="fa-solid fa-table me-1"></i> ${sheet.name}</span>
+            ${Object.keys(appSheets).length > 1 ? `<button class="btn-close-sheet" onclick="event.stopPropagation(); hapusSheet('${id}')" title="Hapus Sheet"><i class="fa-solid fa-xmark"></i></button>` : ''}
+        `;
+        listContainer.appendChild(btn);
+    });
+}
+
+function pindahSheet(id) {
+    simpanKeLokal(); // Simpan state sheet aktif sebelum pindah
+    currentSheetId = id;
+    renderSheetTabs();
+    muatSheetAktif();
+}
+
+function tambahSheetBaru() {
+    let namaSheet = prompt("Masukkan Nama Bidang / Sheet Baru:", "Bidang Intelijen");
+    if (!namaSheet || namaSheet.trim() === "") return;
+    
+    let newId = 'sheet_' + Date.now();
+    appSheets[newId] = {
+        name: namaSheet.trim(),
+        header: {
+            judul: document.getElementById('inputJudul').value,
+            kemen: document.getElementById('inputKemen').value,
+            unitOrg: document.getElementById('inputUnitOrg').value,
+            unitKerja: document.getElementById('inputUnitKerja').value,
+            tanggal: document.getElementById('inputTanggal').value,
+            jabatan: document.getElementById('inputJabatan').value,
+            namaPejabat: document.getElementById('inputNamaPejabat').value,
+            nip: document.getElementById('inputNIP').value,
+            pagu: '1000000000'
+        },
+        rows: [
+            { type: 'kegiatan', kode: '006.02.UK', nama: 'Kegiatan Baru ' + namaSheet, vol: '1.0', satuan: 'Kegiatan', harga: '0', sdcp: 'RM' }
+        ]
+    };
+    
+    currentSheetId = newId;
+    renderSheetTabs();
+    muatSheetAktif();
+    simpanKeLokal();
+}
+
+function duplikatSheetAktif() {
+    let currentSheet = appSheets[currentSheetId];
+    let namaBaru = prompt("Masukkan Nama untuk Sheet Salinan:", currentSheet.name + " (Copy)");
+    if (!namaBaru || namaBaru.trim() === "") return;
+    
+    let newId = 'sheet_' + Date.now();
+    // Deep copy data sheet saat ini
+    appSheets[newId] = JSON.parse(JSON.stringify(currentSheet));
+    appSheets[newId].name = namaBaru.trim();
+    
+    currentSheetId = newId;
+    renderSheetTabs();
+    muatSheetAktif();
+    simpanKeLokal();
+}
+
+function hapusSheet(id) {
+    if (Object.keys(appSheets).length <= 1) {
+        alert("Tidak dapat menghapus satu-satunya sheet yang tersisa.");
+        return;
+    }
+    if (confirm(`Apakah Anda yakin ingin menghapus sheet "${appSheets[id].name}"?`)) {
+        delete appSheets[id];
+        currentSheetId = Object.keys(appSheets)[0];
+        renderSheetTabs();
+        muatSheetAktif();
+        simpanKeLokal();
+    }
+}
 
 // FUNGSI UPDATE DATA KOP & TANDA TANGAN
 function updatePreview() {
@@ -466,6 +649,8 @@ function hitungTotal() {
 
 // FUNGSI SIMPAN KE LOCAL STORAGE
 function simpanKeLokal() {
+    if (!appSheets[currentSheetId]) return;
+
     const headerData = {
         judul: document.getElementById('inputJudul').value,
         kemen: document.getElementById('inputKemen').value,
@@ -498,57 +683,49 @@ function simpanKeLokal() {
         }
     });
 
-    const appData = {
-        header: headerData,
-        rows: rowsData
-    };
+    appSheets[currentSheetId].header = headerData;
+    appSheets[currentSheetId].rows = rowsData;
 
-    localStorage.setItem('e_rab_data_v2', JSON.stringify(appData));
+    localStorage.setItem('e_rab_sheets_data_v2', JSON.stringify(appSheets));
 }
 
-// FUNGSI MUAT DARI LOCAL STORAGE
-function muatDariLokal() {
-    const savedData = localStorage.getItem('e_rab_data_v2');
-    if(savedData) {
-        try {
-            const appData = JSON.parse(savedData);
-            if(appData.header) {
-                document.getElementById('inputJudul').value = appData.header.judul ?? document.getElementById('inputJudul').value;
-                document.getElementById('inputKemen').value = appData.header.kemen ?? document.getElementById('inputKemen').value;
-                document.getElementById('inputUnitOrg').value = appData.header.unitOrg ?? document.getElementById('inputUnitOrg').value;
-                document.getElementById('inputUnitKerja').value = appData.header.unitKerja ?? document.getElementById('inputUnitKerja').value;
-                document.getElementById('inputTanggal').value = appData.header.tanggal ?? document.getElementById('inputTanggal').value;
-                document.getElementById('inputJabatan').value = appData.header.jabatan ?? document.getElementById('inputJabatan').value;
-                document.getElementById('inputNamaPejabat').value = appData.header.namaPejabat ?? document.getElementById('inputNamaPejabat').value;
-                document.getElementById('inputNIP').value = appData.header.nip ?? document.getElementById('inputNIP').value;
-                document.getElementById('inputPagu').value = appData.header.pagu ?? document.getElementById('inputPagu').value;
-            }
+// FUNGSI MUAT SHEET AKTIF DARI LOCAL STORAGE
+function muatSheetAktif() {
+    const sheet = appSheets[currentSheetId];
+    if (!sheet) return;
 
-            const tabelRAB = document.getElementById('tabelRAB');
-            tabelRAB.innerHTML = '';
-
-            if(appData.rows && appData.rows.length > 0) {
-                appData.rows.forEach(r => {
-                    if(r.type === 'kegiatan') {
-                        tambahKegiatan(r.kode, r.nama, r.vol, r.satuan, r.sdcp);
-                    } else {
-                        tambahItem(r.kode, r.nama, r.vol, r.satuan, r.harga, r.sdcp);
-                    }
-                });
-                return;
-            }
-        } catch(e) {
-            console.error("Gagal memuat local storage", e);
-        }
+    if (sheet.header) {
+        document.getElementById('inputJudul').value = sheet.header.judul ?? '';
+        document.getElementById('inputKemen').value = sheet.header.kemen ?? '';
+        document.getElementById('inputUnitOrg').value = sheet.header.unitOrg ?? '';
+        document.getElementById('inputUnitKerja').value = sheet.header.unitKerja ?? '';
+        document.getElementById('inputTanggal').value = sheet.header.tanggal ?? '';
+        document.getElementById('inputJabatan').value = sheet.header.jabatan ?? '';
+        document.getElementById('inputNamaPejabat').value = sheet.header.namaPejabat ?? '';
+        document.getElementById('inputNIP').value = sheet.header.nip ?? '';
+        document.getElementById('inputPagu').value = sheet.header.pagu ?? '0';
     }
 
-    // Default baris awal jika belum ada data tersimpan
-    tambahKegiatan("006.01.BF", "Program Penegakan dan Pelayanan Hukum", "1.0", "Kegiatan", "RM");
-    tambahItem("521211", "- Belanja Bahan", "12", "BLN", "1500000", "RM");
+    const tabelRAB = document.getElementById('tabelRAB');
+    tabelRAB.innerHTML = '';
+
+    if (sheet.rows && sheet.rows.length > 0) {
+        sheet.rows.forEach(r => {
+            if(r.type === 'kegiatan') {
+                tambahKegiatan(r.kode, r.nama, r.vol, r.satuan, r.sdcp);
+            } else {
+                tambahItem(r.kode, r.nama, r.vol, r.satuan, r.harga, r.sdcp);
+            }
+        });
+    }
+
+    updatePreview();
+    hitungTotal();
 }
 
 // FUNGSI DOWNLOAD KE EXCEL ASLI
 function downloadExcel() {
+    let currentSheetName = appSheets[currentSheetId] ? appSheets[currentSheetId].name : 'RAB';
     let excelContent = `
         <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
         <head><meta charset="utf-8"></head>
@@ -570,6 +747,7 @@ function downloadExcel() {
         <br>
         <h3 style="text-align:center;">${document.getElementById('inputJudul').value}</h3>
         <h4 style="text-align:center;">${document.getElementById('cetakSubKemen').innerText}</h4>
+        <div style="text-align:center; font-weight:bold; margin-bottom:15px;">SHEET: ${currentSheetName}</div>
         <br>
         <table border="1">
             <thead style="background-color:#f0f0f0; text-align:center; font-weight:bold;">
@@ -634,16 +812,14 @@ function downloadExcel() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'Rincian_Kertas_Kerja_Satker.xls';
+    a.download = `Rincian_Kertas_Kerja_${currentSheetName.replace(/\s+/g, '_')}.xls`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 } 
 
 window.onload = function() {
-    muatDariLokal();
-    updatePreview();
-    hitungTotal();
+    initMultiSheet();
 };
 </script>
 
