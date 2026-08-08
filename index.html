@@ -113,6 +113,7 @@
             word-break: break-word;
             vertical-align: top;
             line-height: 1.3;
+            text-align: left !important; /* Menerapkan Align Left tegaskan di sini */
         }
 
         /* Menyembunyikan panah dropdown agar presisi seperti teks cetak */
@@ -176,30 +177,35 @@
         }
 
         /* Indentasi Hierarki 1-8 yang lurus dan simetris (12px per level) */
-        .indent-1 { margin-left: 0px; font-weight: bold; }
-        .indent-2 { margin-left: 12px; font-weight: bold; }
-        .indent-3 { margin-left: 24px; font-weight: bold; }
-        .indent-4 { margin-left: 36px; font-weight: bold; }
-        .indent-5 { margin-left: 48px; font-weight: bold; }
-        .indent-6 { margin-left: 60px; font-weight: bold; }
-        .indent-7 { margin-left: 72px; font-weight: bold; }
-        .indent-8 { margin-left: 84px; font-weight: normal; }
+        .indent-1 { margin-left: 0px; font-weight: bold; text-align: left; }
+        .indent-2 { margin-left: 12px; font-weight: bold; text-align: left; }
+        .indent-3 { margin-left: 24px; font-weight: bold; text-align: left; }
+        .indent-4 { margin-left: 36px; font-weight: bold; text-align: left; }
+        .indent-5 { margin-left: 48px; font-weight: bold; text-align: left; }
+        .indent-6 { margin-left: 60px; font-weight: bold; text-align: left; }
+        .indent-7 { margin-left: 72px; font-weight: bold; text-align: left; }
+        .indent-8 { margin-left: 84px; font-weight: normal; text-align: left; }
 
         /* =========================================
-           6. AREA TANDA TANGAN
+           6. AREA TANDA TANGAN & CATATAN
            ========================================= */
         .ttd-area {
             width: 100%;
             margin-top: 25px;
             page-break-inside: avoid;
+            display: flex;
+            justify-content: space-between; /* Membuat catatan di kiri dan TTD di kanan */
+            align-items: flex-end;
+        }
+        .catatan-box {
+            font-size: 11px;
+            text-align: left;
+            line-height: 1.4;
+            width: 40%;
         }
         .ttd-box {
-            float: right;
             width: 300px;
             text-align: left;
-        }
-        .clearfix::after {
-            content: ""; clear: both; display: table;
         }
 
         /* =========================================
@@ -298,8 +304,8 @@
                     <th width="12%">KODE</th>
                     <th width="41%">PROGRAM/KEGIATAN/ KRO/RO/ KOMPONEN/<br>SUBKOMP/DETIL</th>
                     <th width="11%">VOLUME</th>
-                    <th width="12%">HARGA SATUAN</th>
-                    <th width="14%">JUMLAH BIAYA<br>TAHUN 2026</th>
+                    <th width="12%">PERHITUNGAN<br>HARGA SATUAN</th>
+                    <th width="14%">TAHUN 2026<br>JUMLAH BIAYA</th>
                     <th width="6%">SD/<br>CP</th>
                     <th width="4%" class="col-aksi sembunyikan-saat-cetak">
                         <button class="btn btn-sm btn-primary py-0 px-2 w-100" onclick="tambahBarisBawah(null, 1)" title="Tambah Baris Utama">+</button>
@@ -319,12 +325,17 @@
                 </tbody>
         </table>
 
-        <div class="ttd-area clearfix">
+        <div class="ttd-area">
+            <div class="catatan-box">
+                Catatan 1. U = Komponen Utama<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. P = Komponen Penunjang<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Blokir
+            </div>
             <div class="ttd-box">
-                <input type="text" class="doc-input mb-1" id="inpTgl" value="Langgur, 31 Desember 2025" oninput="simpanData();"><br>
-                <input type="text" class="doc-input mb-4" id="inpJabatan" value="KEPALA KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="simpanData();"><br><br><br>
-                <input type="text" class="doc-input fw-bold" id="inpNamaPejabat" value="Dr. FADJAR, S.H.,M.H." oninput="simpanData();" style="text-decoration: underline;"><br>
-                <input type="text" class="doc-input" id="inpNip" value="JAKSA UTAMA PRATAMA NIP. 197411112002121002" oninput="simpanData();">
+                <input type="text" class="doc-input mb-4" id="inpTgl" value="Langgur, 22 Juli 2026" oninput="simpanData();"><br>
+                <input type="text" class="doc-input sembunyikan-saat-cetak mb-1" id="inpJabatan" value="" placeholder="(Jabatan - Dikosongkan sesuai PDF)" oninput="simpanData();"><br><br>
+                <input type="text" class="doc-input fw-bold" id="inpNamaPejabat" value="FADJAR" oninput="simpanData();" style="text-decoration: underline;"><br>
+                <input type="text" class="doc-input" id="inpNip" value="Jaksa Utama Pratama 197411112002121002" oninput="simpanData();">
             </div>
         </div>
 
@@ -353,6 +364,8 @@
         <option value="Bulan">BLN</option>
         <option value="Tahun">THN</option>
         <option value="M2">M2</option>
+        <option value="Lembaga">Lembaga</option>
+        <option value="Orang">Orang</option>
     `;
 
     /* --- 2. FUNGSI SINKRON KOP --- */
@@ -426,8 +439,8 @@
         let rupiah = numStr.substr(0, sisa);
         let ribuan = numStr.substr(sisa).match(/\d{3}/g);
         if (ribuan) {
-            let separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
+            let separator = sisa ? ',' : ''; // Menggunakan koma standar PDF e-RAB jika diinginkan, namun JS base ini pakai titik
+            rupiah += separator + ribuan.join(',');
         }
         return rupiah;
     }
@@ -450,17 +463,17 @@
         if (level === 8) {
             htmlVol = `
                 <div class="d-flex align-items-center gap-1 sembunyikan-saat-cetak">
-                    <input type="number" class="doc-input text-center inp-vol" placeholder="0" oninput="hitungSemua()" style="border-bottom: 1px dashed #ccc;">
-                    <select class="doc-select inp-sat" onchange="hitungSemua()" style="border-bottom: 1px dashed #ccc;">
+                    <input type="number" class="doc-input text-end inp-vol" placeholder="0" oninput="hitungSemua()" style="border-bottom: 1px dashed #ccc; text-align: right;">
+                    <select class="doc-select inp-sat text-start" onchange="hitungSemua()" style="border-bottom: 1px dashed #ccc;">
                         ${opsiSatuan}
                     </select>
                 </div>
-                <div class="tampil-saat-cetak-saja text-center span-vol w-100 h-100 d-flex align-items-center justify-content-center"></div>
+                <div class="tampil-saat-cetak-saja text-start span-vol w-100 h-100 d-flex align-items-center justify-content-start ps-2"></div>
             `;
-            htmlHarga = `<input type="text" class="doc-input text-end inp-harga" placeholder="0" oninput="formatInputRupiah(this); hitungSemua()">`;
+            htmlHarga = `<input type="text" class="doc-input text-end inp-harga" placeholder="0" oninput="formatInputRupiah(this); hitungSemua()" style="text-align: right;">`;
         } else {
             // Form Level 1-7
-            htmlVol = `<input type="text" class="doc-input text-center" placeholder="...">`;
+            htmlVol = `<input type="text" class="doc-input text-start ps-2" placeholder="...">`;
         }
         
         // Kolom SD/CP (Menggunakan doc-select no-arrow agar lurus dan bersih layaknya teks cetak)
@@ -481,7 +494,7 @@
 
         let htmlTr = `
             <td>
-                <input type="text" class="doc-input ${level < 8 ? 'fw-bold' : ''}" placeholder="Kode">
+                <input type="text" class="doc-input text-start ${level < 8 ? 'fw-bold' : ''}" placeholder="Kode">
             </td>
             <td>
                 <div class="${cssIndent}">
@@ -491,7 +504,7 @@
             <td class="align-middle p-1">${htmlVol}</td>
             <td class="align-middle">${htmlHarga}</td>
             <td class="align-middle">
-                <input type="text" class="doc-input text-end fw-bold inp-jumlah" readonly>
+                <input type="text" class="doc-input text-end fw-bold inp-jumlah" readonly style="text-align: right;">
             </td>
             <td class="align-middle">
                 ${htmlSdCp}
@@ -559,7 +572,7 @@
                 // Sync text Cetak Volume
                 let s = row.querySelector('.inp-sat')?.value || '';
                 let cetakVol = row.querySelector('.span-vol');
-                if(cetakVol) cetakVol.innerText = v > 0 ? (v + ' ' + s) : '';
+                if(cetakVol) cetakVol.innerText = v > 0 ? (v.toFixed(1) + ' ' + s) : ''; // Disesuaikan PDF 1.0
             } else {
                 row.dataset.val = 0; // Reset Parent
             }
@@ -631,7 +644,7 @@
             <table>
                 <thead>
                     <tr style="background:#f2f2f2; text-align:center; font-weight:bold;">
-                        <th>KODE</th><th>PROGRAM/KEGIATAN/KRO/RO/KOMPONEN/SUBKOMP/DETIL</th><th>VOLUME</th><th>HARGA SATUAN</th><th>JUMLAH BIAYA</th><th>SD/CP</th>
+                        <th>KODE</th><th>PROGRAM/KEGIATAN/KRO/RO/KOMPONEN/SUBKOMP/DETIL</th><th>VOLUME</th><th>PERHITUNGAN HARGA SATUAN</th><th>TAHUN 2026 JUMLAH BIAYA</th><th>SD/CP</th>
                     </tr>
                 </thead><tbody>`;
         
@@ -656,13 +669,20 @@
             let fw = lvl < 8 ? 'font-weight:bold;' : '';
 
             htm += `<tr style="${fw}">
-                <td>${k}</td><td>${indent}${u}</td><td style="text-align:center;">${v}</td><td style="text-align:right;">${h}</td><td style="text-align:right;">${j}</td><td style="text-align:center;">${s}</td>
+                <td style="text-align:left;">${k}</td><td style="text-align:left;">${indent}${u}</td><td style="text-align:left;">${v}</td><td style="text-align:right;">${h}</td><td style="text-align:right;">${j}</td><td style="text-align:center;">${s}</td>
             </tr>`;
         });
         
         htm += `</tbody></table><br><br>
             <table>
-                <tr><td colspan="4" style="border:none"></td><td colspan="2" style="border:none">${document.getElementById('inpTgl').value}</td></tr>
+                <tr>
+                    <td colspan="4" style="border:none; text-align:left; vertical-align:top;">
+                        Catatan 1. U = Komponen Utama<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. P = Komponen Penunjang<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Blokir
+                    </td>
+                    <td colspan="2" style="border:none">${document.getElementById('inpTgl').value}</td>
+                </tr>
                 <tr><td colspan="4" style="border:none"></td><td colspan="2" style="border:none">${document.getElementById('inpJabatan').value}</td></tr>
                 <tr><td colspan="4" style="border:none"></td><td colspan="2" style="border:none"><br><br><br><b><u>${document.getElementById('inpNamaPejabat').value}</u></b><br>${document.getElementById('inpNip').value}</td></tr>
             </table></body></html>`;
