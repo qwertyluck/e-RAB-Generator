@@ -10,8 +10,8 @@
     
     <style>
         /* =========================================
-           1. TEMA & BACKGROUND APLIKASI (PROFESIONAL)
-           ========================================= */
+            1. TEMA & BACKGROUND APLIKASI (PROFESIONAL)
+            ========================================= */
         :root {
             --primary: #004d40; /* Hijau tua elegan */
             --primary-dark: #00251a;
@@ -35,8 +35,8 @@
         }
 
         /* =========================================
-           2. TABS MULTI-SHEET (MODERN UI)
-           ========================================= */
+            2. TABS MULTI-SHEET (MODERN UI)
+            ========================================= */
         .sheet-tabs-container {
             background: #ffffff;
             border-radius: 8px;
@@ -54,7 +54,7 @@
             gap: 8px;
             overflow-x: auto;
             white-space: nowrap;
-            padding-bottom: 4px; /* Space for scrollbar if many tabs */
+            padding-bottom: 4px;
         }
 
         .sheet-tab {
@@ -111,15 +111,15 @@
         }
 
         /* =========================================
-           3. KERTAS DOKUMEN (WYSIWYG)
-           ========================================= */
+            3. KERTAS DOKUMEN (WYSIWYG)
+            ========================================= */
         .document-paper {
             background: #ffffff;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 50px 60px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08); /* Shadow yang lebih dalam dan lembut */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
             border-radius: 6px;
             margin-bottom: 40px;
             font-size: 11px;
@@ -137,6 +137,7 @@
             box-sizing: border-box;
             transition: all 0.2s;
             display: block;
+            text-align: left;
         }
         .doc-input:focus, .doc-textarea:focus, .doc-select:focus {
             background: #fdfdfd;
@@ -154,6 +155,8 @@
             vertical-align: top;
             line-height: 1.3;
             text-align: left !important;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .doc-select.no-arrow {
@@ -165,8 +168,8 @@
         }
 
         /* =========================================
-           4. FORMAT KOP SURAT
-           ========================================= */
+            4. FORMAT KOP SURAT
+            ========================================= */
         .kop-table {
             width: 100%;
             font-weight: bold;
@@ -188,8 +191,8 @@
         .title-section u { font-size: 13px; }
 
         /* =========================================
-           5. TABEL RINCIAN KERTAS KERJA
-           ========================================= */
+            5. TABEL RINCIAN KERTAS KERJA & INDENTASI
+            ========================================= */
         .rab-table {
             width: 100%;
             border-collapse: collapse;
@@ -207,22 +210,22 @@
             font-weight: bold;
             vertical-align: middle;
             padding: 8px 4px;
-            border-bottom: 2px solid #000; /* Garis header lebih tegas */
+            border-bottom: 2px solid #000;
         }
 
-        /* Indentasi Hierarki */
-        .indent-1 { margin-left: 0px; font-weight: bold; text-align: left; }
-        .indent-2 { margin-left: 12px; font-weight: bold; text-align: left; }
-        .indent-3 { margin-left: 24px; font-weight: bold; text-align: left; }
-        .indent-4 { margin-left: 36px; font-weight: bold; text-align: left; }
-        .indent-5 { margin-left: 48px; font-weight: bold; text-align: left; }
-        .indent-6 { margin-left: 60px; font-weight: bold; text-align: left; }
-        .indent-7 { margin-left: 72px; font-weight: bold; text-align: left; }
-        .indent-8 { margin-left: 84px; font-weight: normal; text-align: left; }
+        /* Indentasi Hierarki yang Sempurna & Rata Kiri */
+        .indent-1 { padding-left: 0px; font-weight: bold; text-align: left !important; width: 100%; box-sizing: border-box; }
+        .indent-2 { padding-left: 16px; font-weight: bold; text-align: left !important; width: 100%; box-sizing: border-box; }
+        .indent-3 { padding-left: 32px; font-weight: bold; text-align: left !important; width: 100%; box-sizing: border-box; }
+        .indent-4 { padding-left: 48px; font-weight: bold; text-align: left !important; width: 100%; box-sizing: border-box; }
+        .indent-5 { padding-left: 64px; font-weight: bold; text-align: left !important; width: 100%; box-sizing: border-box; }
+        .indent-6 { padding-left: 80px; font-weight: bold; text-align: left !important; width: 100%; box-sizing: border-box; }
+        .indent-7 { padding-left: 96px; font-weight: bold; text-align: left !important; width: 100%; box-sizing: border-box; }
+        .indent-8 { padding-left: 112px; font-weight: normal; text-align: left !important; width: 100%; box-sizing: border-box; }
 
         /* =========================================
-           6. AREA TANDA TANGAN & CATATAN
-           ========================================= */
+            6. AREA TANDA TANGAN & CATATAN
+            ========================================= */
         .ttd-area {
             width: 100%;
             margin-top: 30px;
@@ -235,8 +238,8 @@
         .ttd-box { width: 300px; text-align: left; }
 
         /* =========================================
-           7. PENGATURAN CETAK (PRINT MEDIA)
-           ========================================= */
+            7. PENGATURAN CETAK (PRINT MEDIA)
+            ========================================= */
         @media print {
             @page { size: landscape; margin: 15mm; }
             body { background: #fff !important; }
@@ -268,7 +271,7 @@
 
 <div class="container-fluid py-4">
     
-    <!-- Bagian Multi-Sheet UI Baru -->
+    <!-- Bagian Multi-Sheet UI -->
     <div class="sheet-tabs-container sembunyikan-saat-cetak" id="sheetTabs">
         <div class="tabs-wrapper" id="tabsWrapper">
             <!-- Tab Default -->
@@ -362,7 +365,8 @@
                 </tr>
             </thead>
             <tbody id="rabTableBody">
-                </tbody>
+                <!-- Baris dinamis dimuat disini -->
+            </tbody>
         </table>
 
         <div class="ttd-area">
@@ -409,7 +413,6 @@
     `;
 
     /* --- 2. FUNGSI BANTUAN UNTUK TAB --- */
-    // Mengekstrak nama asli dari tab HTML (mengabaikan ikon tombol)
     function getSheetName(tabElement) {
         let titleEl = tabElement.querySelector('.tab-title');
         return titleEl ? titleEl.innerText.trim() : '';
@@ -646,7 +649,7 @@
         simpanData();
     }
 
-    /* --- 8. EXPORT EXCEL --- */
+    /* --- 8. EXPORT EXCEL (Dengan Perbaikan Rata Kiri & Padding Indentasi Sempurna) --- */
     function unduhExcel() {
         let actTab = document.querySelector('.sheet-tab.active');
         let nSheet = actTab ? getSheetName(actTab) : 'Sheet1';
@@ -676,7 +679,7 @@
             let lvl = parseInt(tr.getAttribute('data-level'));
             let k = tr.querySelector('td:nth-child(1) input').value;
             let u = tr.querySelector('textarea').value.replace(/\n/g, '<br>');
-            let indent = lvl > 1 ? '&nbsp;'.repeat((lvl-1)*4) : '';
+            let paddingLeftPx = (lvl - 1) * 16;
             
             let v = '', h = '';
             if (lvl === 8) {
@@ -693,7 +696,12 @@
             let fw = lvl < 8 ? 'font-weight:bold;' : '';
 
             htm += `<tr style="${fw}">
-                <td style="text-align:left;">${k}</td><td style="text-align:left;">${indent}${u}</td><td style="text-align:left;">${v}</td><td style="text-align:right;">${h}</td><td style="text-align:right;">${j}</td><td style="text-align:center;">${s}</td>
+                <td style="text-align:left;">${k}</td>
+                <td style="text-align:left; padding-left:${paddingLeftPx}px;">${u}</td>
+                <td style="text-align:left;">${v}</td>
+                <td style="text-align:right;">${h}</td>
+                <td style="text-align:right;">${j}</td>
+                <td style="text-align:center;">${s}</td>
             </tr>`;
         });
         
@@ -718,7 +726,7 @@
         a.click();
     }
 
-    /* --- 9. MANAJEMEN MULTI-SHEET & LOCAL STORAGE TINGKAT LANJUT --- */
+    /* --- 9. MANAJEMEN MULTI-SHEET & LOCAL STORAGE --- */
     let g_sheetCount = 1;
 
     function simpanData() {
@@ -783,7 +791,6 @@
         }, 100);
     }
 
-    // FITUR BARU: Menambahkan Sheet Kosong
     function tambahSheetBaru() {
         g_sheetCount++;
         let nama = prompt("Nama Bidang/Sheet Baru:", "Bidang " + g_sheetCount);
@@ -797,34 +804,30 @@
         buatTabDOM(nama);
     }
 
-    // FITUR BARU: Menyalin Sheet Aktif untuk Revisi/Tambahan
     function salinSheetAktif() {
         let act = document.querySelector('.sheet-tab.active');
         if(!act) return;
         
         let oldName = getSheetName(act);
-        let newName = prompt("Masukkan nama untuk Salinan RAB ini (Contoh: RAB Tambahan/Revisi):", oldName + " - Revisi");
+        let newName = prompt("Masukkan nama untuk Salinan RAB ini:", oldName + " - Revisi");
         
         if(!newName || newName === oldName) return;
         
         if(localStorage.getItem(`RAB3_${newName}`)) {
-            alert("Nama sheet sudah ada! Silakan gunakan nama lain agar tidak tertimpa.");
+            alert("Nama sheet sudah ada! Silakan gunakan nama lain.");
             return;
         }
 
-        // Kloning data di Local Storage
         let oldRab = localStorage.getItem(`RAB3_${oldName}`);
         let oldKop = localStorage.getItem(`KOP3_${oldName}`);
         localStorage.setItem(`RAB3_${newName}`, oldRab || "");
         localStorage.setItem(`KOP3_${newName}`, oldKop || "{}");
 
-        // Buat UI Tab Baru dan pindah fokus
         buatTabDOM(newName);
     }
 
-    // FITUR BARU: Mengubah Nama Sheet yang Sudah Ada
     function editNamaSheet(btn, ev) {
-        ev.stopPropagation(); // Mencegah klik menyebar ke fungsi pindahSheet
+        ev.stopPropagation();
         let tab = btn.closest('.sheet-tab');
         let oldName = getSheetName(tab);
         
@@ -832,11 +835,10 @@
         if(!newName || newName === oldName) return;
         
         if(localStorage.getItem(`RAB3_${newName}`)) {
-            alert("Nama sheet tersebut sudah digunakan! Gunakan nama lain.");
+            alert("Nama sheet tersebut sudah digunakan!");
             return;
         }
 
-        // Migrasi Data Kunci Penyimpanan
         let rabData = localStorage.getItem(`RAB3_${oldName}`);
         let kopData = localStorage.getItem(`KOP3_${oldName}`);
         
@@ -846,16 +848,13 @@
         localStorage.removeItem(`RAB3_${oldName}`);
         localStorage.removeItem(`KOP3_${oldName}`);
 
-        // Update UI
         tab.querySelector('.tab-title').innerText = newName;
         
-        // Refresh jika sedang aktif
         if(tab.classList.contains('active')) {
             muatData(newName);
         }
     }
 
-    // Pembuatan elemen Tab UI secara terpusat
     function buatTabDOM(nama) {
         let tab = document.createElement('div');
         tab.className = 'sheet-tab';
@@ -882,7 +881,7 @@
     function hapusSheet(btn, ev) {
         ev.stopPropagation();
         if(document.querySelectorAll('.sheet-tab').length === 1) {
-            alert("Sheet terakhir tidak bisa dihapus. Aplikasi minimal membutuhkan 1 lembar kerja."); return;
+            alert("Sheet terakhir tidak bisa dihapus."); return;
         }
         if(confirm("Hapus lembar kerja ini beserta seluruh isinya secara permanen?")) {
             let tab = btn.closest('.sheet-tab');
@@ -892,7 +891,6 @@
             localStorage.removeItem(`KOP3_${nm}`);
             tab.remove();
             
-            // Fokus otomatis ke tab pertama yang tersisa
             pindahSheet(document.querySelector('.sheet-tab'));
         }
     }
