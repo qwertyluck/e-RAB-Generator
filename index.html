@@ -3,22 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi e-RAB Kertas Kerja Satker v6 (PDF Direct Export)</title>
+    <title>Aplikasi e-RAB Kertas Kerja Satker v5 (Profesional Edition)</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Library untuk langsung konversi HTML ke PDF murni -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <style>
         /* =========================================
            1. TEMA & BACKGROUND APLIKASI (PROFESIONAL)
            ========================================= */
         :root {
-            --primary: #004d40;
+            --primary: #004d40; /* Hijau tua elegan */
             --primary-dark: #00251a;
-            --accent: #ffc107;
+            --accent: #ffc107; /* Aksen emas/kuning */
             --bg-app: #f0f4f8;
             --border-color: #000000;
         }
@@ -57,7 +54,7 @@
             gap: 8px;
             overflow-x: auto;
             white-space: nowrap;
-            padding-bottom: 4px;
+            padding-bottom: 4px; /* Space for scrollbar if many tabs */
         }
 
         .sheet-tab {
@@ -73,7 +70,9 @@
             align-items: center;
             transition: all 0.2s ease;
         }
-        .sheet-tab:hover { background: #e2e8f0; }
+        .sheet-tab:hover {
+            background: #e2e8f0;
+        }
         .sheet-tab.active {
             background: var(--primary);
             color: white;
@@ -88,10 +87,19 @@
         }
         
         .btn-action-sheet {
-            font-size: 10px; padding: 3px 6px; border-radius: 4px; 
-            background: rgba(0,0,0,0.06); color: inherit; border: none; cursor: pointer; transition: 0.2s;
+            font-size: 10px; 
+            padding: 3px 6px; 
+            border-radius: 4px; 
+            background: rgba(0,0,0,0.06); 
+            color: inherit; 
+            border: none; 
+            cursor: pointer; 
+            transition: 0.2s;
         }
-        .sheet-tab.active .btn-action-sheet { background: rgba(255,255,255,0.2); color: white; }
+        .sheet-tab.active .btn-action-sheet {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
         .btn-action-sheet.edit:hover { background: #0d6efd; color: white; }
         .btn-action-sheet.delete:hover { background: #dc3545; color: white; }
 
@@ -110,8 +118,8 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 50px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            padding: 50px 60px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); /* Shadow yang lebih dalam dan lembut */
             border-radius: 6px;
             margin-bottom: 40px;
             font-size: 11px;
@@ -145,7 +153,6 @@
             word-break: break-word;
             vertical-align: top;
             line-height: 1.3;
-            /* Paksaan Rata Kiri */
             text-align: left !important;
         }
 
@@ -158,23 +165,27 @@
         }
 
         /* =========================================
-           4. FORMAT KOP SURAT (SEJAJAR & SAMA RATA)
+           4. FORMAT KOP SURAT
            ========================================= */
         .kop-table {
             width: 100%;
             font-weight: bold;
             font-size: 11px;
+            margin-bottom: 10px;
             border-collapse: collapse;
             border: none;
         }
-        .kop-table td { padding: 2px 0; vertical-align: top; border: none; }
+        .kop-table td { padding: 3px 0; vertical-align: middle; border: none; }
         
         .title-section {
-            text-align: left;
-            font-size: 11px;
+            text-align: center;
+            font-size: 12px;
             font-weight: bold;
-            line-height: 1.4;
+            margin-top: 20px;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
+        .title-section u { font-size: 13px; }
 
         /* =========================================
            5. TABEL RINCIAN KERTAS KERJA
@@ -196,26 +207,18 @@
             font-weight: bold;
             vertical-align: middle;
             padding: 8px 4px;
-            border-bottom: 2px solid #000;
-        }
-
-        /* Paksaan Rata Kiri pada Kolom 2 */
-        .rab-table td:nth-child(2) {
-            text-align: left !important;
-        }
-        .rab-table td:nth-child(2) * {
-            text-align: left !important;
+            border-bottom: 2px solid #000; /* Garis header lebih tegas */
         }
 
         /* Indentasi Hierarki */
-        .indent-1 { margin-left: 0px; font-weight: bold; text-align: left !important; }
-        .indent-2 { margin-left: 12px; font-weight: bold; text-align: left !important; }
-        .indent-3 { margin-left: 24px; font-weight: bold; text-align: left !important; }
-        .indent-4 { margin-left: 36px; font-weight: bold; text-align: left !important; }
-        .indent-5 { margin-left: 48px; font-weight: bold; text-align: left !important; }
-        .indent-6 { margin-left: 60px; font-weight: bold; text-align: left !important; }
-        .indent-7 { margin-left: 72px; font-weight: bold; text-align: left !important; }
-        .indent-8 { margin-left: 84px; font-weight: normal; text-align: left !important; }
+        .indent-1 { margin-left: 0px; font-weight: bold; text-align: left; }
+        .indent-2 { margin-left: 12px; font-weight: bold; text-align: left; }
+        .indent-3 { margin-left: 24px; font-weight: bold; text-align: left; }
+        .indent-4 { margin-left: 36px; font-weight: bold; text-align: left; }
+        .indent-5 { margin-left: 48px; font-weight: bold; text-align: left; }
+        .indent-6 { margin-left: 60px; font-weight: bold; text-align: left; }
+        .indent-7 { margin-left: 72px; font-weight: bold; text-align: left; }
+        .indent-8 { margin-left: 84px; font-weight: normal; text-align: left; }
 
         /* =========================================
            6. AREA TANDA TANGAN & CATATAN
@@ -232,18 +235,8 @@
         .ttd-box { width: 300px; text-align: left; }
 
         /* =========================================
-           7. PENGATURAN CETAK PDF (html2pdf Mode)
+           7. PENGATURAN CETAK (PRINT MEDIA)
            ========================================= */
-        /* Menyembunyikan elemen secara bersih saat proses rendering PDF berjalan */
-        .is-printing-pdf .sembunyikan-saat-cetak { display: none !important; }
-        .is-printing-pdf .document-paper { box-shadow: none !important; margin: 0 !important; padding: 10mm 15mm !important; }
-        .is-printing-pdf .doc-input, 
-        .is-printing-pdf .doc-textarea, 
-        .is-printing-pdf .doc-select { 
-            border: none !important; background: transparent !important; 
-        }
-        .is-printing-pdf .rab-table th { background-color: #f2f2f2 !important; color-adjust: exact; -webkit-print-color-adjust: exact; }
-
         @media print {
             @page { size: landscape; margin: 15mm; }
             body { background: #fff !important; }
@@ -266,8 +259,8 @@
             <button class="btn btn-warning btn-sm fw-bold shadow-sm" onclick="unduhExcel()">
                 <i class="fas fa-file-excel"></i> Unduh Excel
             </button>
-            <button class="btn btn-light btn-sm text-dark fw-bold shadow-sm" onclick="unduhPDF()">
-                <i class="fas fa-file-pdf text-danger"></i> Download PDF
+            <button class="btn btn-light btn-sm text-dark fw-bold shadow-sm" onclick="window.print()">
+                <i class="fas fa-print"></i> Cetak PDF
             </button>
         </div>
     </div>
@@ -278,6 +271,7 @@
     <!-- Bagian Multi-Sheet UI Baru -->
     <div class="sheet-tabs-container sembunyikan-saat-cetak" id="sheetTabs">
         <div class="tabs-wrapper" id="tabsWrapper">
+            <!-- Tab Default -->
             <div class="sheet-tab active" onclick="pindahSheet(this)">
                 <span class="tab-title">Bidang Pidum</span>
                 <div class="tab-actions">
@@ -297,54 +291,54 @@
         </div>
     </div>
 
-    <!-- Area Kertas -->
-    <div class="document-paper" id="areaCetakPDF">
+    <div class="document-paper">
         
-        <!-- Header / Kop: Disejajarkan (Kiri & Tengah) -->
-        <div class="d-flex justify-content-between align-items-start mb-4">
-            <!-- Blok Kiri: Unit Kerja & Alokasi -->
-            <div style="width: 48%;">
-                <table class="kop-table w-100">
-                    <tr>
-                        <td width="28%">KEMEN/LEMB</td>
-                        <td width="72%"><input type="text" class="doc-input fw-bold" id="inpKemen" value="(006) Kejaksaan Republik Indonesia" oninput="sinkronKop(); simpanData();"></td>
-                    </tr>
-                    <tr>
-                        <td>UNIT ORG</td>
-                        <td><input type="text" class="doc-input fw-bold" id="inpOrg" value="(01) Kejaksaan Republik Indonesia" oninput="sinkronKop(); simpanData();"></td>
-                    </tr>
-                    <tr>
-                        <td>UNIT KERJA</td>
-                        <td><input type="text" class="doc-input fw-bold" id="inpKerja" value="(691164) KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="sinkronKop(); simpanData();"></td>
-                    </tr>
-                    <tr>
-                        <td>ALOKASI</td>
-                        <td class="d-flex"><span class="fw-bold mt-1 me-1">Rp.</span> <input type="text" class="doc-input fw-bold" id="inpPagu" value="4.779.914.000" oninput="formatInputRupiah(this); hitungSemua();" style="color: #000;"></td>
-                    </tr>
-                </table>
-                <span id="statusSisa" class="fw-bold sembunyikan-saat-cetak text-success mt-1 d-inline-block">SISA: Rp. 0</span>
-            </div>
-            
-            <!-- Blok Kanan: Judul sejajar persis dengan baris pertama Kemen/Lemb -->
-            <div style="width: 50%;">
-                <div class="title-section mt-0">
-                    <u>RINCIAN KERTAS KERJA SATKER T.A. 2026</u><br>
-                    <span id="lblKemen">KEJAKSAAN REPUBLIK INDONESIA</span><br>
-                    <span id="lblOrg" style="font-weight: normal;">Kejaksaan Republik Indonesia</span><br>
-                    <span id="lblKerja">KEJAKSAAN NEGERI MALUKU TENGGARA</span>
-                </div>
-            </div>
+        <table class="kop-table">
+            <tr>
+                <td width="10%">KEMEN/LEMB</td>
+                <td width="55%">
+                    <input type="text" class="doc-input fw-bold" id="inpKemen" value="(006) Kejaksaan Republik Indonesia" oninput="sinkronKop(); simpanData();">
+                </td>
+                <td width="15%"></td>
+                <td width="20%"></td>
+            </tr>
+            <tr>
+                <td>UNIT ORG</td>
+                <td>
+                    <input type="text" class="doc-input fw-bold" id="inpOrg" value="(01) Kejaksaan Republik Indonesia" oninput="sinkronKop(); simpanData();">
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>UNIT KERJA</td>
+                <td>
+                    <input type="text" class="doc-input fw-bold" id="inpKerja" value="(691164) KEJAKSAAN NEGERI MALUKU TENGGARA" oninput="sinkronKop(); simpanData();">
+                </td>
+                <td class="text-end pe-2">ALOKASI Rp.</td>
+                <td>
+                    <input type="text" class="doc-input fw-bold text-end" id="inpPagu" value="4.779.914.000" oninput="formatInputRupiah(this); hitungSemua();" style="color: #000;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span id="statusSisa" class="fw-bold sembunyikan-saat-cetak text-success mt-1 d-inline-block">SISA: Rp. 0</span>
+                </td>
+                <td class="text-end pe-2">Halaman :</td>
+                <td>
+                    <input type="text" class="doc-input text-end" id="inpHal" value="1" oninput="simpanData();">
+                </td>
+            </tr>
+        </table>
+
+        <div class="title-section">
+            <u>RINCIAN KERTAS KERJA SATKER T.A. 2026</u><br>
+            <span id="lblKemen">KEJAKSAAN REPUBLIK INDONESIA</span><br>
+            <span id="lblOrg" style="font-weight: normal;">Kejaksaan Republik Indonesia</span><br>
+            <span id="lblKerja">KEJAKSAAN NEGERI MALUKU TENGGARA</span>
         </div>
 
-        <!-- Posisi Halaman : 1 (Absolute terhadap Tabel) -->
-        <div class="position-relative w-100" style="height: 20px;">
-            <div class="d-flex align-items-center" style="position: absolute; right: 6%; top: 0; width: 120px;">
-                <span class="me-1 fw-bold" style="font-size: 11px;">Halaman:</span>
-                <input type="text" class="doc-input text-start fw-bold" id="inpHal" value="1" oninput="simpanData();" style="width: 40px;">
-            </div>
-        </div>
-
-        <table class="rab-table mt-1">
+        <table class="rab-table">
             <thead>
                 <tr>
                     <th width="12%">KODE</th>
@@ -368,10 +362,9 @@
                 </tr>
             </thead>
             <tbody id="rabTableBody">
-            </tbody>
+                </tbody>
         </table>
 
-        <!-- Tanda Tangan: Jarak dipadatkan -->
         <div class="ttd-area">
             <div class="catatan-box">
                 Catatan 1. U = Komponen Utama<br>
@@ -379,11 +372,10 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Blokir
             </div>
             <div class="ttd-box">
-                <input type="text" class="doc-input mb-4" id="inpTgl" value="Langgur, 22 Juli 2026" oninput="simpanData();">
-                <input type="text" class="doc-input sembunyikan-saat-cetak mb-4" id="inpJabatan" value="" placeholder="(Ketik Jabatan jika ada)" oninput="simpanData();">
-                <!-- Spasi kosong dihapus dan dirapatkan -->
-                <input type="text" class="doc-input fw-bold" id="inpNamaPejabat" value="FADJAR" oninput="simpanData();" style="text-decoration: underline; margin-bottom: -2px; padding-bottom: 0;">
-                <input type="text" class="doc-input" id="inpNip" value="Jaksa Utama Pratama 197411112002121002" oninput="simpanData();" style="padding-top: 0;">
+                <input type="text" class="doc-input mb-4" id="inpTgl" value="Langgur, 22 Juli 2026" oninput="simpanData();"><br>
+                <input type="text" class="doc-input sembunyikan-saat-cetak mb-1" id="inpJabatan" value="" placeholder="(Ketik Jabatan jika ada)" oninput="simpanData();"><br><br>
+                <input type="text" class="doc-input fw-bold" id="inpNamaPejabat" value="FADJAR" oninput="simpanData();" style="text-decoration: underline;"><br>
+                <input type="text" class="doc-input" id="inpNip" value="Jaksa Utama Pratama 197411112002121002" oninput="simpanData();">
             </div>
         </div>
 
@@ -417,6 +409,7 @@
     `;
 
     /* --- 2. FUNGSI BANTUAN UNTUK TAB --- */
+    // Mengekstrak nama asli dari tab HTML (mengabaikan ikon tombol)
     function getSheetName(tabElement) {
         let titleEl = tabElement.querySelector('.tab-title');
         return titleEl ? titleEl.innerText.trim() : '';
@@ -653,38 +646,7 @@
         simpanData();
     }
 
-    /* --- 8. EXPORT HTML2PDF (F4 POTRAIT & NAMA FILE DINAMIS) --- */
-    function unduhPDF() {
-        simpanData(); // Pastikan seluruh atribut tersimpan di elemen
-        
-        let actTab = document.querySelector('.sheet-tab.active');
-        let defName = actTab ? getSheetName(actTab) : 'RAB';
-        
-        // Meminta input nama file sebelum download
-        let namaFile = prompt("Masukkan nama file PDF yang akan disimpan:", "RAB_" + defName);
-        if (!namaFile) return;
-
-        // Tambahkan tag khusus agar elemen yang disembunyikan saat cetak menghilang dari PDF
-        document.body.classList.add('is-printing-pdf');
-
-        // Pengaturan PDF format kertas F4 (215 x 330 mm) dengan margin resmi
-        let opt = {
-            margin:       15, // Margin sekeliling 15mm
-            filename:     namaFile.endsWith('.pdf') ? namaFile : namaFile + '.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'mm', format: [215, 330], orientation: 'portrait' }
-        };
-
-        let element = document.getElementById('areaCetakPDF');
-
-        // Proses render dan unduh langsung otomatis
-        html2pdf().set(opt).from(element).save().then(() => {
-            document.body.classList.remove('is-printing-pdf'); // Kembalikan UI setelah sukses
-        });
-    }
-
-    /* --- 9. EXPORT EXCEL --- */
+    /* --- 8. EXPORT EXCEL --- */
     function unduhExcel() {
         let actTab = document.querySelector('.sheet-tab.active');
         let nSheet = actTab ? getSheetName(actTab) : 'Sheet1';
@@ -756,7 +718,7 @@
         a.click();
     }
 
-    /* --- 10. MANAJEMEN MULTI-SHEET & LOCAL STORAGE TINGKAT LANJUT --- */
+    /* --- 9. MANAJEMEN MULTI-SHEET & LOCAL STORAGE TINGKAT LANJUT --- */
     let g_sheetCount = 1;
 
     function simpanData() {
@@ -821,6 +783,7 @@
         }, 100);
     }
 
+    // FITUR BARU: Menambahkan Sheet Kosong
     function tambahSheetBaru() {
         g_sheetCount++;
         let nama = prompt("Nama Bidang/Sheet Baru:", "Bidang " + g_sheetCount);
@@ -834,6 +797,7 @@
         buatTabDOM(nama);
     }
 
+    // FITUR BARU: Menyalin Sheet Aktif untuk Revisi/Tambahan
     function salinSheetAktif() {
         let act = document.querySelector('.sheet-tab.active');
         if(!act) return;
@@ -848,16 +812,19 @@
             return;
         }
 
+        // Kloning data di Local Storage
         let oldRab = localStorage.getItem(`RAB3_${oldName}`);
         let oldKop = localStorage.getItem(`KOP3_${oldName}`);
         localStorage.setItem(`RAB3_${newName}`, oldRab || "");
         localStorage.setItem(`KOP3_${newName}`, oldKop || "{}");
 
+        // Buat UI Tab Baru dan pindah fokus
         buatTabDOM(newName);
     }
 
+    // FITUR BARU: Mengubah Nama Sheet yang Sudah Ada
     function editNamaSheet(btn, ev) {
-        ev.stopPropagation(); 
+        ev.stopPropagation(); // Mencegah klik menyebar ke fungsi pindahSheet
         let tab = btn.closest('.sheet-tab');
         let oldName = getSheetName(tab);
         
@@ -869,6 +836,7 @@
             return;
         }
 
+        // Migrasi Data Kunci Penyimpanan
         let rabData = localStorage.getItem(`RAB3_${oldName}`);
         let kopData = localStorage.getItem(`KOP3_${oldName}`);
         
@@ -878,13 +846,16 @@
         localStorage.removeItem(`RAB3_${oldName}`);
         localStorage.removeItem(`KOP3_${oldName}`);
 
+        // Update UI
         tab.querySelector('.tab-title').innerText = newName;
         
+        // Refresh jika sedang aktif
         if(tab.classList.contains('active')) {
             muatData(newName);
         }
     }
 
+    // Pembuatan elemen Tab UI secara terpusat
     function buatTabDOM(nama) {
         let tab = document.createElement('div');
         tab.className = 'sheet-tab';
@@ -921,6 +892,7 @@
             localStorage.removeItem(`KOP3_${nm}`);
             tab.remove();
             
+            // Fokus otomatis ke tab pertama yang tersisa
             pindahSheet(document.querySelector('.sheet-tab'));
         }
     }
